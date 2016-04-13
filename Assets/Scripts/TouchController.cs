@@ -21,21 +21,19 @@ public class TouchController : MonoBehaviour {
 
 		foreach (Touch touch in Input.touches) {
 			if (touch.phase == TouchPhase.Began) {
-				RaycastHit2D hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (touch.position), Vector2.zero);
+				RaycastHit2D hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (touch.position),
+					Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer("Button"));
 				buttonTouched = hit.collider.gameObject.name;
 				text.text = buttonTouched;
 				touchedButtons.Add (buttonTouched);
 				if (hit.collider != null) {
 					if (buttonTouched == "RightArrow") {
 						amelia.movingRight = true;
-						amelia.moveBegun = true;
 					} else if (buttonTouched == "JumpButton") {
-						//amelia.jumping = true;
 						amelia.Jump();
 					} else if (buttonTouched == "LeftArrow") {
 						amelia.movingLeft = true;
 					} else if (buttonTouched == "AttackButton") {
-						//amelia.attacking = true;
 						amelia.Attack();
 					} else if (buttonTouched == "UpArrow") {
 						amelia.SwitchWeapon (true);
