@@ -48,12 +48,16 @@
      <Compile Include="Assets\Scripts\Amelia.cs" />
      <Compile Include="Assets\Scripts\AtkCollider.cs" />
      <Compile Include="Assets\Scripts\AttackMode.cs" />
+     <Compile Include="Assets\Scripts\ColliderEscalar.cs" />
+     <Compile Include="Assets\Scripts\Fireball.cs" />
      <Compile Include="Assets\Scripts\KeyboardController.cs" />
      <Compile Include="Assets\Scripts\Knight.cs" />
      <Compile Include="Assets\Scripts\KnightController.cs" />
      <Compile Include="Assets\Scripts\MouseController.cs" />
+     <Compile Include="Assets\Scripts\PenhascoSmooth.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\TouchController.cs" />
+     <Compile Include="Assets\Scripts\Wyvern.cs" />
      <Compile Include="Assets\Scripts\test.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5.32f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

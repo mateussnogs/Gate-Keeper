@@ -29,5 +29,21 @@ public class KeyboardController : MonoBehaviour {
 			amelia.movingLeft = false;
 		if (Input.GetKeyUp (KeyCode.RightArrow))
 			amelia.movingRight = false;
+
+
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			if (amelia.CanClimb ()) {
+				amelia.climbing = true;
+				amelia.climbingUp = true;
+			}
+		}
+		else if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			if (amelia.CanClimb ()) {
+				amelia.climbing = true;
+				amelia.climbingDown = true;
+			}
+		}
+			
+
 	}
 }

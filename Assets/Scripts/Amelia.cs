@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded;
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimb;
 	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
 	private float swordUpTime = 0.6f;
 	private float spearDownTime = 0.66f;
@@ -21,6 +21,7 @@ public class Amelia : MonoBehaviour {
 	float journeyLength;
 	public float boundLeft, boundRight;
 	public float atkReach;
+	public int life, numPiscadas;
 
 	public GameObject weaponChoosenIcon;
 
@@ -33,6 +34,9 @@ public class Amelia : MonoBehaviour {
 	public GameObject atkButton;
 	public GameObject jumpButton;
 	public GameObject atkCollider;
+	public GameObject ground2;
+	public GameObject penhasco;
+
 	// Use this for initialization
 	void Start () {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), rightArrowCollider.GetComponent<Collider2D>());
@@ -50,17 +54,21 @@ public class Amelia : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {
+		if (life <= 0)
+			Die ();
 	}
 
 	void FixedUpdate() {
-		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
-		if (!attacking)
-			anim.SetBool ("Ground", grounded);
+		if (!climbing) {
+			grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
+			if (!attacking)
+				anim.SetBool ("Ground", grounded);
+		}
 	}
 
 	public void Move(bool right) {
-		if (!attacking || !grounded) { 
+		if ((!attacking || !grounded)) { 
 			float distToWalk;
 			if (right)
 				distToWalk = 0.2f;
@@ -93,39 +101,7 @@ public class Amelia : MonoBehaviour {
 			else
 				return false;
 		}
-	}
-	public void MoveRight() {
-		if (!attacking || grounded == false) {
-			anim.SetBool ("Moving", true);
-			if (!facingRight)
-				Flip ();
-			origin = transform.position;
-			if ((origin + new Vector3 (0.2f, 0, 0)).x <= boundRight)
-				destiny = origin + new Vector3 (0.2f, 0, 0);
-			else
-				destiny = origin;
-			journeyLength = Vector3.Distance (origin, destiny);
-			//GetComponent<Rigidbody2D> ().MovePosition(transform.position + new Vector3(speed*0.4f, 0, 0));
-			//transform.position = Vector3.Lerp (origin, destiny, journeyLength);
-			transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
-		}
-	}
-
-	public void MoveLeft() {
-		if (!attacking || grounded == false) {
-			anim.SetBool ("Moving", true);
-			if (facingRight)
-				Flip ();
-			origin = transform.position;
-			if ((origin - new Vector3 (0.2f, 0, 0)).x >= boundLeft)
-				destiny = origin - new Vector3 (0.2f, 0, 0);
-			else
-				destiny = origin;
-			journeyLength = Vector3.Distance (origin, destiny);
-
-			transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
-		}
-	}
+	}		
 
 	public void Jump() {
 		if (grounded) {
@@ -133,28 +109,69 @@ public class Amelia : MonoBehaviour {
 			GetComponent<Rigidbody2D> ().AddForce (new Vector2 (0, jumpForce));
 		}
 	}
+
+	public void Climb(bool up) {
+		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), ground2.GetComponent<Collider2D>());
+		anim.SetBool ("Climbing", true);
+		GetComponent<Rigidbody2D> ().gravityScale = 0;
+		Vector3 destiny;
+		if (up)
+			destiny = transform.position + new Vector3 (0, 1, 0);
+		else
+			destiny = transform.position + new Vector3 (0, -1, 0);
+		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
+	}
+
+	public void StopClimbing() {
+		if (climbingUp)
+			climbingUp = false;
+		else
+			climbingDown = false;
+		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), ground2.GetComponent<Collider2D>(), false);
+		anim.SetBool ("Climbing", false);
+		climbing = false;
+		GetComponent<Rigidbody2D> ().gravityScale = 2;
+	}
+
+	public bool CanClimb() {
+		return canClimb;
+	}
 		
 	public void Attack() {
-		transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
-		attacking = true;
-		anim.SetBool ("Ground", true);
-		if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
-			anim.Play ("SwordUp");
-		} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
-			anim.Play ("SpearDown");
-
-		} else if (attackOptions [indexWeapon] == AttackMode.AxeDown) {
-			anim.Play ("AxeDown");
+		if (!attacked || attacked) {
+			
+			//transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
+			attacking = true;
+			anim.SetBool ("Ground", true);
+			if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
+				anim.Play ("SwordUp");
+			} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
+				anim.Play ("SpearDown");
+			} else if (attackOptions [indexWeapon] == AttackMode.AxeDown) {
+				anim.Play ("AxeDown");
+			}
+			float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
+			StartCoroutine (InstantiateAtkCollider (atkTime/2));
+			//attackAnimTime = anim.GetCurrentAnimatorStateInfo (0).length;
+			StartCoroutine (BackMoving (atkTime)); 
 		}
-		//attackAnimTime = anim.GetCurrentAnimatorStateInfo (0).length;
-		StartCoroutine (BackMoving (attackTimes[attackOptions[indexWeapon]])); //pega o tempo do atk pelo dicionário
 
+	}
+
+	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
+		yield return new WaitForSeconds (seconds);
+		transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 	}
 
 	IEnumerator BackMoving(float waitTime) {
 		yield return new WaitForSeconds (waitTime);
 		attacking = false;
 		transform.GetChild (1).gameObject.SetActive (false);
+	}
+
+	IEnumerator AttackedFalse(float waitTime) {
+		yield return new WaitForSeconds (waitTime);
+		attacked = false;
 	}
 	public void SwitchWeapon(bool trocaPraDireita) {
 		
@@ -171,7 +188,31 @@ public class Amelia : MonoBehaviour {
 		}
 	}
 
+	public void GetHit() {
+		life--;
+		StartCoroutine (PiscaVermelho ());
+		attacked = true;
+		StartCoroutine (AttackedFalse (0.5f));
+	}
 
+	public void IgnoraColisaoPenhasco() {
+		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), penhasco.GetComponent<Collider2D>());
+	}
+
+	IEnumerator PiscaVermelho() {
+		
+		if (GetComponent<SpriteRenderer> ().color == Color.red)
+			GetComponent<SpriteRenderer> ().color = Color.white;
+		else
+			GetComponent<SpriteRenderer> ().color = Color.red;
+		yield return new WaitForSeconds (0.2f);
+		if (++numPiscadas <= 4)
+			StartCoroutine (PiscaVermelho ());
+		else {
+			GetComponent<SpriteRenderer> ().color = Color.white;
+			numPiscadas = 0;
+		}
+	}
 
 	void Flip() {
 		facingRight = !facingRight;
@@ -185,6 +226,9 @@ public class Amelia : MonoBehaviour {
 		print (anim.GetCurrentAnimatorStateInfo (0).length);
 	}
 
+	void Die() {
+		gameObject.SetActive (false);
+	}
 
 		
 }

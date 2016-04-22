@@ -5,10 +5,16 @@ public class KnightController : MonoBehaviour {
 	private Amelia amelia;
 	Knight knight;
 
-	public float cooldownToFind;
-	public float findTimeAcum;
+	Animator anim;
+	public float cooldownToFind, cooldownToWalk, cooldownToWaitToWalk;
+	float findTimeAcum, walkingTime, waitingWalkTime;
+	public bool waitingToWalkState = true;
+
+	bool beginTimerWalk = true;
+
 	// Use this for initialization
 	void Start () {
+		anim = GetComponent<Animator> ();
 		GameObject ameliaGO = GameObject.FindGameObjectWithTag ("Amelia");
 		amelia = ameliaGO.GetComponent<Amelia>();
 		knight = GetComponent<Knight>();
@@ -18,10 +24,15 @@ public class KnightController : MonoBehaviour {
 			knight.Attack ();
 		if (CooldownDone())
 			FindAmelia ();
-		if (knight.movingLeft)
-			knight.Move (false);
-		else if (knight.movingRight)
-			knight.Move (true);
+		if (knight.backingOff) {
+			knight.BackOff ();
+		}
+		if (WalkMachineState()) {
+			if (knight.movingLeft)
+				knight.Move (false);
+			else if (knight.movingRight)
+				knight.Move (true);
+		}
 	}
 
 	void FindAmelia() {
@@ -46,7 +57,38 @@ public class KnightController : MonoBehaviour {
 			return true;
 		}
 		return false;
-	}		
+	}
+
+	bool WalkMachineState() {
+		anim.SetBool ("Moving", false);
+		if (waitingToWalkState) {
+			if (beginTimerWalk) {
+				beginTimerWalk = false;
+				waitingWalkTime = Time.time + cooldownToWalk;
+			}
+			if (Time.time > waitingWalkTime) {
+				waitingToWalkState = false; // Troco de estado
+				beginTimerWalk = true;
+			}
+		}
+
+		else {
+			if (beginTimerWalk) {
+				beginTimerWalk = false;
+				walkingTime = Time.time + cooldownToWaitToWalk;
+			}
+				
+			if (Time.time > walkingTime) {
+				waitingToWalkState = true; // Troco de estado
+				beginTimerWalk = true;
+			}
+		}
+
+		if (waitingToWalkState)
+			return true;
+		else
+			return false;
+	}
 
 
 

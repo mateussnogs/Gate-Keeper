@@ -13,7 +13,14 @@ public class AtkCollider : MonoBehaviour {
 
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == "Knight")
-			other.gameObject.GetComponent<Knight> ().GetHit ();
+		
+		if (gameObject.tag == "AtkAmelia") {
+			if (other.gameObject.tag == "Knight")
+				other.gameObject.GetComponent<Knight> ().GetHit ();
+		} else if (gameObject.tag == "AtkKnight") {
+			if (other.gameObject.tag == "Amelia") {
+				other.gameObject.GetComponent<Amelia> ().GetHit ();
+			}
+		}
 	}
 }

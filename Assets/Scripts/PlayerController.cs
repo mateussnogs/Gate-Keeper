@@ -25,9 +25,15 @@ public class PlayerController : MonoBehaviour {
 
 	void ProcessState() {
 		if (amelia.movingRight) {
-			amelia.Move(true);
+			amelia.Move (true);
 		} else if (amelia.movingLeft)
-			amelia.Move(false);
+			amelia.Move (false);
+		else if (amelia.climbing) {
+			if (amelia.climbingUp)
+				amelia.Climb (true);
+			else
+				amelia.Climb (false);
+		}
 		else {
 			amelia.anim.SetBool ("Moving", false);
 		}
