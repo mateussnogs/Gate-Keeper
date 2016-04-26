@@ -16,10 +16,13 @@ public class AtkCollider : MonoBehaviour {
 		
 		if (gameObject.tag == "AtkAmelia") {
 			if (other.gameObject.tag == "Knight")
-				other.gameObject.GetComponent<Knight> ().GetHit ();
+				other.gameObject.GetComponent<Knight2> ().Attacked ();
 		} else if (gameObject.tag == "AtkKnight") {
 			if (other.gameObject.tag == "Amelia") {
-				other.gameObject.GetComponent<Amelia> ().GetHit ();
+				Amelia amelia = other.gameObject.GetComponent<Amelia> ();
+				Knight knight = transform.parent.gameObject.GetComponent<Knight> ();
+				if (!knight.attacked)
+					amelia.GetHit ();
 			}
 		}
 	}

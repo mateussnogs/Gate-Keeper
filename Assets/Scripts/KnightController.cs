@@ -22,7 +22,7 @@ public class KnightController : MonoBehaviour {
 	void Update () {
 		if (FoundAmelia ())
 			knight.Attack ();
-		if (CooldownDone())
+		else if (CooldownToFindDone())
 			FindAmelia ();
 		if (knight.backingOff) {
 			knight.BackOff ();
@@ -36,12 +36,14 @@ public class KnightController : MonoBehaviour {
 	}
 
 	void FindAmelia() {
-		if (amelia.transform.position.x > transform.position.x) {
-			knight.movingRight = true;
-			knight.movingLeft = false;
-		} else {
-			knight.movingLeft = true;
-			knight.movingRight = false;
+		if (!knight.attacking) {
+			if (amelia.transform.position.x > transform.position.x) {
+				knight.movingRight = true;
+				knight.movingLeft = false;
+			} else {
+				knight.movingLeft = true;
+				knight.movingRight = false;
+			}
 		}
 	}
 
@@ -51,7 +53,7 @@ public class KnightController : MonoBehaviour {
 		return false;
 	}
 
-	bool CooldownDone() {
+	bool CooldownToFindDone() {
 		if (Time.time > findTimeAcum) {
 			findTimeAcum = Time.time + cooldownToFind;
 			return true;
@@ -60,8 +62,9 @@ public class KnightController : MonoBehaviour {
 	}
 
 	bool WalkMachineState() {
-		anim.SetBool ("Moving", false);
+		//anim.SetBool ("Moving", false);
 		if (waitingToWalkState) {
+			anim.SetBool ("Moving", false);
 			if (beginTimerWalk) {
 				beginTimerWalk = false;
 				waitingWalkTime = Time.time + cooldownToWalk;

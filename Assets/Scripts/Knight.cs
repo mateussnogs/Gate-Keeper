@@ -6,7 +6,7 @@ public class Knight : MonoBehaviour {
 	Vector3 origin;
 	Vector3 destiny;
 	public float boundLeft, boundRight, speed, atkReach, atkCooldown, atkTimeAcc;
-	public bool movingRight, movingLeft, facingRight, attacking, attacked, defBroke, begun;
+	public bool movingRight, movingLeft, facingRight, attacking, attacked, defBroke, begunBackingOff;
 	public float life;
 
 	public bool backingOff;
@@ -25,7 +25,7 @@ public class Knight : MonoBehaviour {
 		
 	public void Move(bool right) {
 		float distToWalk;
-		if (!backingOff) {
+		if (!backingOff && !attacking) {
 			if (right)
 				distToWalk = 0.2f;
 			else
@@ -39,8 +39,9 @@ public class Knight : MonoBehaviour {
 			origin = transform.position;
 			if (CanWalk (right, origin + new Vector3 (distToWalk, 0, 0)))
 				destiny = origin + new Vector3 (distToWalk, 0, 0);
-			else
-				destiny = origin;
+			else // nao pode andar entao nao faz porra nenhuma
+				return;
+				//destiny = origin;
 			transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
 		}
 	}
@@ -77,29 +78,36 @@ public class Knight : MonoBehaviour {
 	}
 
 	public void Attack() {
-		if (!attacked && !backingOff) {			
-			if (Time.time >= atkTimeAcc) {
+		//print (anim.GetCurrentAnimatorStateInfo (0).length);
+		if (!attacked && !backingOff && !attacking) {			
+			if (Time.time > atkTimeAcc) {
 				attacking = true;
-				transform.GetChild (0).gameObject.SetActive (true);
 				atkTimeAcc = Time.time + atkCooldown;
 				anim.Play ("Attack");
-				StartCoroutine(StopAtk(0.2f));
+				StartCoroutine(StopAtk(2));
+				StartCoroutine (InstantiateAtk (1.2f));
 			}
 		}
 	}
 
 	public void GetHit() {
 		
-		if (!ShieldBroken ()) {
+		if (CanDefend() && !ShieldBroken ()) {
 			anim.Play ("Stand");
 			backingOff = true;
-			begun = true;
+			begunBackingOff = true;
 		} else {
 			life--;
 			attacked = true;		
 			anim.Play ("Attacked");
 			StartCoroutine (StopBeingAttacked (0.5f));
 		}
+	}
+
+	bool CanDefend() {
+		if (!attacking)
+			return true;
+		return false;
 	}
 
 	IEnumerator StopBeingAttacked(float attackedTimeAnim) {
@@ -113,6 +121,10 @@ public class Knight : MonoBehaviour {
 		transform.GetChild (0).gameObject.SetActive (false);
 	}
 
+	IEnumerator InstantiateAtk(float waitTime) {
+		yield return new WaitForSeconds(waitTime);
+		transform.GetChild (0).gameObject.SetActive (true);
+	}
 	void Die() {
 		gameObject.SetActive (false);
 	}
@@ -126,9 +138,9 @@ public class Knight : MonoBehaviour {
 	}
 
 	public void BackOff() {
-		if (begun) {
+		if (begunBackingOff) {
 			anim.SetBool ("Moving", false);
-			begun = false;
+			begunBackingOff = false;
 			origin = transform.position;
 			if (facingRight)
 				destiny = transform.position + new Vector3 (-1f, 0, 0);

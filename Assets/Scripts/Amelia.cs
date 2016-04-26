@@ -138,8 +138,6 @@ public class Amelia : MonoBehaviour {
 	}
 		
 	public void Attack() {
-		if (!attacked || attacked) {
-			
 			//transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 			attacking = true;
 			anim.SetBool ("Ground", true);
@@ -152,10 +150,7 @@ public class Amelia : MonoBehaviour {
 			}
 			float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
 			StartCoroutine (InstantiateAtkCollider (atkTime/2));
-			//attackAnimTime = anim.GetCurrentAnimatorStateInfo (0).length;
-			StartCoroutine (BackMoving (atkTime)); 
-		}
-
+			StartCoroutine (StopAttackRoutine (atkTime)); 
 	}
 
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
@@ -163,7 +158,7 @@ public class Amelia : MonoBehaviour {
 		transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 	}
 
-	IEnumerator BackMoving(float waitTime) {
+	IEnumerator StopAttackRoutine(float waitTime) {
 		yield return new WaitForSeconds (waitTime);
 		attacking = false;
 		transform.GetChild (1).gameObject.SetActive (false);

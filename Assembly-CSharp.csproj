@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Fireball.cs" />
      <Compile Include="Assets\Scripts\KeyboardController.cs" />
      <Compile Include="Assets\Scripts\Knight.cs" />
+     <Compile Include="Assets\Scripts\Knight2.cs" />
      <Compile Include="Assets\Scripts\KnightController.cs" />
      <Compile Include="Assets\Scripts\MouseController.cs" />
      <Compile Include="Assets\Scripts\PenhascoSmooth.cs" />
