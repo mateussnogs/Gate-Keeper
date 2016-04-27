@@ -13,11 +13,13 @@ public class Knight2 : MonoBehaviour {
 	bool stateBegun = false; // state begun begins only at the scope of the state, but not on the switch
 	bool facingRight = false;
 	Amelia amelia;
+	GameObject atkCollider;
 
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
+		atkCollider = transform.GetChild (0).gameObject;
 	}
 	
 	// Update is called once per frame
@@ -64,12 +66,18 @@ public class Knight2 : MonoBehaviour {
 		if (!stateBegun) {
 			stateBegun = true;
 			attackTimeAcc = Time.time + attackTime;
+			StartCoroutine(InstantiateAtk(attackTime*0.85f));
 		}
-
 		if (Time.time > attackTimeAcc) {
 			anim.SetBool ("Attack", false);
+			atkCollider.SetActive (false);
 			SwitchState (State.Waiting, "Stand");
 		}
+	}
+
+	IEnumerator InstantiateAtk(float timeToWait) {
+		yield return new WaitForSeconds (timeToWait);
+		atkCollider.SetActive (true);
 	}
 	void GetHit() {
 		if (!stateBegun) {
@@ -92,11 +100,18 @@ public class Knight2 : MonoBehaviour {
 			SwitchState (State.Attacked, "Attacked");
 	}
 
-	void Defend() {
+	Vector3 destiny;
+	void Defend() {		
 		if (!stateBegun) {
 			stateBegun = true;
 			defendTimeAcc = Time.time + defendTime;
+
+			if (facingRight)
+				destiny = transform.position + new Vector3 (-1, 0, 0);
+			else
+				destiny = transform.position + new Vector3 (1, 0, 0);
 		}
+		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime*walkSpeed*3);
 		if (Time.time > defendTimeAcc) {
 			anim.SetBool ("Defend", false);
 			SwitchState (State.Waiting, "Stand");
@@ -135,6 +150,7 @@ public class Knight2 : MonoBehaviour {
 	}
 
 	void SwitchState(State newState, string animVar) {
+		atkCollider.SetActive (false); // gambiarra pra sempre garantir que o atkcollider seja desligado
 		state = newState;
 		stateBegun = false;
 		ChangeAnimationState (animVar, true);

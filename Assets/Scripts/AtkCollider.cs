@@ -20,8 +20,8 @@ public class AtkCollider : MonoBehaviour {
 		} else if (gameObject.tag == "AtkKnight") {
 			if (other.gameObject.tag == "Amelia") {
 				Amelia amelia = other.gameObject.GetComponent<Amelia> ();
-				Knight knight = transform.parent.gameObject.GetComponent<Knight> ();
-				if (!knight.attacked)
+				Knight2 knight = transform.parent.gameObject.GetComponent<Knight2> ();
+				if (knight.state != Knight2.State.Attacked)
 					amelia.GetHit ();
 			}
 		}

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimb;
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown;
 	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
 	private float swordUpTime = 0.6f;
 	private float spearDownTime = 0.66f;
@@ -131,10 +131,6 @@ public class Amelia : MonoBehaviour {
 		anim.SetBool ("Climbing", false);
 		climbing = false;
 		GetComponent<Rigidbody2D> ().gravityScale = 2;
-	}
-
-	public bool CanClimb() {
-		return canClimb;
 	}
 		
 	public void Attack() {

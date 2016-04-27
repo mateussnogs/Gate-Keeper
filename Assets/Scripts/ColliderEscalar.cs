@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class ColliderEscalar : MonoBehaviour {
-
+	public static int ameliaDetected = 0;
+	public string altura;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,20 +15,34 @@ public class ColliderEscalar : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Amelia") {
-			other.GetComponent<Amelia> ().StopClimbing ();
+		if (gameObject.tag == "ColliderEscadaParar") {
+			if (other.gameObject.tag == "Amelia")
+				other.GetComponent<Amelia> ().StopClimbing ();
+		} else if (gameObject.tag == "ColliderEscalar") {
+			if (other.gameObject.tag == "Amelia") {
+				if (++ameliaDetected == 2) {
+					if (altura == "cima")
+						other.GetComponent<Amelia> ().canClimbDown = true;
+					else if (altura == "baixo") {
+						other.GetComponent<Amelia> ().canClimbUp = true;
+					}
+				}
+			}
 		}
 	}
 
 	void OnTriggerStay2D(Collider2D other) {
-		if (other.gameObject.tag == "Amelia") {
-			other.GetComponent<Amelia> ().canClimb = true;
-		}
 	}
 
 	void OnTriggerExit2D(Collider2D other) {
-		if (other.gameObject.tag == "Amelia") {
-			other.GetComponent<Amelia> ().canClimb = false;
+		if (gameObject.tag == "ColliderEscalar") {
+			if (other.gameObject.tag == "Amelia") {			
+				ameliaDetected--;
+				if (altura == "cima")
+					other.GetComponent<Amelia> ().canClimbDown = false;
+				else if (altura == "baixo")
+					other.GetComponent<Amelia> ().canClimbUp = false;
+			}
 		}
 	}
 }
