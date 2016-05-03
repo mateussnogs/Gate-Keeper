@@ -78,9 +78,9 @@ public class Amelia : MonoBehaviour {
 			
 			anim.SetBool ("Moving", true);
 			if (right && !facingRight)
-				Flip ();
+				ChangeDirection ();
 			else if (!right && facingRight)
-				Flip ();
+				ChangeDirection ();
 			origin = transform.position;
 			if (CanWalk (right, origin + new Vector3 (distToWalk, 0, 0)))
 				destiny = origin + new Vector3 (distToWalk, 0, 0);
@@ -206,23 +206,18 @@ public class Amelia : MonoBehaviour {
 		}
 	}
 
-	void Flip() {
+	void ChangeDirection() { //aka Flip()
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
-	}
-
-	IEnumerator ShowCurrentClipLength() {
-		yield return new WaitForEndOfFrame ();
-		print (anim.GetCurrentAnimatorStateInfo (0).length);
-	}
+	}		
 
 	void Die() {
 		gameObject.SetActive (false);
 	}
 
-	public Vector3 ViewPortPosiition() {
+	public Vector3 ViewPortPosition() {
 		return Camera.main.WorldToViewportPoint (transform.position);
 	}
 
