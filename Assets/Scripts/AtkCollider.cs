@@ -15,8 +15,9 @@ public class AtkCollider : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		
 		if (gameObject.tag == "AtkAmelia") {
-			if (other.gameObject.tag == "Knight")
-				other.gameObject.GetComponent<Knight2> ().Attacked ();
+			if (other.gameObject.tag == "Knight" || other.gameObject.tag == "Enemy")
+				other.gameObject.GetComponent<Enemy> ().Attacked ();
+				//other.gameObject.GetComponent<Knight2> ().Attacked ();
 		} else if (gameObject.tag == "AtkKnight") {
 			if (other.gameObject.tag == "Amelia") {
 				Amelia amelia = other.gameObject.GetComponent<Amelia> ();

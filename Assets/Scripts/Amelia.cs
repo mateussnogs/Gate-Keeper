@@ -22,6 +22,7 @@ public class Amelia : MonoBehaviour {
 	public float boundLeft, boundRight;
 	public float atkReach;
 	public int life, numPiscadas;
+	public float climbSpeed = 1;
 
 	public GameObject weaponChoosenIcon;
 
@@ -119,7 +120,7 @@ public class Amelia : MonoBehaviour {
 			destiny = transform.position + new Vector3 (0, 1, 0);
 		else
 			destiny = transform.position + new Vector3 (0, -1, 0);
-		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
+		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * climbSpeed);
 	}
 
 	public void StopClimbing() {
@@ -219,6 +220,10 @@ public class Amelia : MonoBehaviour {
 
 	void Die() {
 		gameObject.SetActive (false);
+	}
+
+	public Vector3 ViewPortPosiition() {
+		return Camera.main.WorldToViewportPoint (transform.position);
 	}
 
 		

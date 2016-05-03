@@ -48,12 +48,13 @@
      <Compile Include="Assets\Scripts\Amelia.cs" />
      <Compile Include="Assets\Scripts\AtkCollider.cs" />
      <Compile Include="Assets\Scripts\AttackMode.cs" />
+     <Compile Include="Assets\Scripts\BackgroundBounds.cs" />
+     <Compile Include="Assets\Scripts\Button.cs" />
      <Compile Include="Assets\Scripts\ColliderEscalar.cs" />
+     <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Fireball.cs" />
      <Compile Include="Assets\Scripts\KeyboardController.cs" />
-     <Compile Include="Assets\Scripts\Knight.cs" />
      <Compile Include="Assets\Scripts\Knight2.cs" />
-     <Compile Include="Assets\Scripts\KnightController.cs" />
      <Compile Include="Assets\Scripts\MouseController.cs" />
      <Compile Include="Assets\Scripts\PenhascoSmooth.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />

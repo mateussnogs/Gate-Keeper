@@ -10,16 +10,27 @@ public class Fireball : MonoBehaviour {
 	public Vector3 targetDir;
 	// Use this for initialization
 	void Start () {
-		origin = transform.position;
-		destiny = (target.transform.position - origin).normalized;
+		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
+
+		targetDir = (amelia.transform.position - transform.position).normalized;
+		GetComponent<Rigidbody2D> ().velocity = targetDir*speed;
 	}
 	
 	// Update is called once per frame//
 	void Update () {
-		//transform.position += targetDir * speed * Time.deltaTime;
-		Vector3 moveDir = (GetComponent<Renderer>().bounds.center - transform.position);
-		//ACHAR CENTRO DO TARGET
-		//Vector3 moveDir = (target.transform.position - transform.position);
-		transform.position = Vector3.MoveTowards (transform.position, moveDir, Time.deltaTime * speed);
+	}
+
+	void FollowTarget() {
+		targetDir = amelia.transform.position;
+		transform.position = Vector3.MoveTowards (transform.position, targetDir, Time.deltaTime * speed);
+	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		if (other.gameObject.tag == "Amelia") {
+			amelia.GetHit ();
+			Destroy (gameObject);
+		}
+		if (other.gameObject.tag == "Ground")
+			Destroy (gameObject);
 	}
 }

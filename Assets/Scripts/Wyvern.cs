@@ -1,39 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Wyvern : MonoBehaviour {
-	public Amelia amelia;
-	public Fireball fireball;
-	public float shootCooldown;
-	float shootTimeAcc = 0;
-
+public class Wyvern : Enemy {
 	// Use this for initialization
+	public Fireball fireball;
 	void Start () {
-	
+		base.Start ();
+		id = ID.Wyvern;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		base.Update ();
+		if (state == State.RunningAway)
+			GetComponent<Collider2D> ().enabled = false;
+		else
+			GetComponent<Collider2D> ().enabled = true;
 	}
 
-	void FixedUpdate() {
-		Attack ();
+	public override bool Move ()
+	{
+		AmeliaLocation ameliaLocation = FindAmelia ();
+		if (facingRight && ameliaLocation == AmeliaLocation.Left) {
+			ChangeDirection ();
+		} else if (!facingRight && ameliaLocation == AmeliaLocation.Right)
+			ChangeDirection ();
+		return true;
 	}
 
-	void Attack() {
-		if (Time.time > shootTimeAcc) {
-			Shoot (amelia.gameObject);
-			shootTimeAcc = Time.time + shootCooldown;
+	public override void Attack() {
+		if (!stateBegun) {
+			stateBegun = true;
+			attackTimeAcc = Time.time + attackTime;
+			Fireball fb = Instantiate (fireball, transform.position, fireball.transform.rotation) as Fireball;
+			fb.targetDir = (amelia.transform.position - transform.position).normalized;
+		}
+		if (Time.time > attackTimeAcc) {
+			anim.SetBool ("Attack", false);
+			if (atkCollider != null)
+				atkCollider.SetActive (false);
+			SwitchState (State.Waiting, "Stand");
 		}
 	}
 
-	void Shoot(GameObject go) {		
-		Fireball fb = Instantiate (fireball, transform.position, Quaternion.identity) as Fireball;
-		fb.target = go;
-		fb.targetDir = (go.transform.position - transform.position).normalized;
-		/*float speed = fb.speed;
-		fb.GetComponent<Rigidbody2D> ().velocity = go.transform.position - transform.position * speed;*/
-
-	}
 }
