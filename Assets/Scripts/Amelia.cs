@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
 	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown;
 	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
-	private float swordUpTime = 0.6f;
+	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
 	private float axeDownTime = 0.75f;
 	private Dictionary<AttackMode, float> attackTimes;
@@ -215,6 +216,7 @@ public class Amelia : MonoBehaviour {
 
 	void Die() {
 		gameObject.SetActive (false);
+		SceneManager.LoadScene ("GameOver");
 	}
 
 	public Vector3 ViewPortPosition() {

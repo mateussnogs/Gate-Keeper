@@ -16,6 +16,8 @@ public class Wyvern : Enemy {
 			GetComponent<Collider2D> ().enabled = false;
 		else
 			GetComponent<Collider2D> ().enabled = true;
+		if (life <= 0)
+			Die ();
 	}
 
 	public override bool Move ()
@@ -41,6 +43,10 @@ public class Wyvern : Enemy {
 				atkCollider.SetActive (false);
 			SwitchState (State.Waiting, "Stand");
 		}
+	}
+
+	public void Die() {
+		Destroy (gameObject);
 	}
 
 }

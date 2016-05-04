@@ -11,12 +11,15 @@ public class Knight2 : Enemy {
 
 	void Update() {
 		base.Update ();
+		if (life <= 0)
+			Die ();
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Amelia")
-			print ("iha");
 	}
 
+	void Die() {
+		Destroy (gameObject);
+	}
 	
 }

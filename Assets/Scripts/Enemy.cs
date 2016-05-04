@@ -100,7 +100,10 @@ public class Enemy : MonoBehaviour {
 		if (Time.time > attackedTimeAcc) {
 			life--;
 			anim.SetBool ("Attacked", false);
-			SwitchState (State.Waiting, "Stand");
+			if (id == ID.Wyvern)
+				SwitchState (State.RunningAway, "RunAway");
+			else
+				SwitchState (State.Waiting, "Stand");
 		}
 
 	} // ou Attacked()
@@ -109,10 +112,11 @@ public class Enemy : MonoBehaviour {
 		CleanAnimationStateMachine (); // State setado quando atacado e com prioridade maior. Por isso limpa a machine state.
 		if (Defended () && id == ID.Knight)
 			SwitchState (State.Defending, "Defend");
-		else if (id == ID.Knight)
+		else if (id == ID.Knight) {
 			SwitchState (State.Attacked, "Attacked"); // vai chamar GetHit por estar no estado Attacked
-		else if (id == ID.Wyvern)
-			SwitchState (State.RunningAway, "RunAway");
+		} else if (id == ID.Wyvern) {			
+			SwitchState (State.RunningAway, "Attacked");
+		}
 	}
 
 	Vector3 destiny;
@@ -153,6 +157,7 @@ public class Enemy : MonoBehaviour {
 		anim.SetBool ("Walk", false);
 		anim.SetBool ("Attacked", false);
 		anim.SetBool ("Defend", false);
+		anim.SetBool ("RunAway", false);
 	}
 
 	public virtual void Wait() {

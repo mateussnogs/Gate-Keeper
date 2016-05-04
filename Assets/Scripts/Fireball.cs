@@ -8,10 +8,13 @@ public class Fireball : MonoBehaviour {
 	Vector3 origin;
 	Vector3 destiny;
 	public Vector3 targetDir;
+	bool facingRight = false;
 	// Use this for initialization
 	void Start () {
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
-
+		if (amelia.transform.position.x > transform.position.x)
+			ChangeDirection ();
+		
 		targetDir = (amelia.transform.position - transform.position).normalized;
 		GetComponent<Rigidbody2D> ().velocity = targetDir*speed;
 	}
@@ -33,4 +36,11 @@ public class Fireball : MonoBehaviour {
 		if (other.gameObject.tag == "Ground")
 			Destroy (gameObject);
 	}
+
+	void ChangeDirection() { //aka Flip()
+		facingRight = !facingRight;
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
+	}	
 }
