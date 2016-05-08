@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway};
@@ -21,9 +22,13 @@ public class Enemy : MonoBehaviour {
 	public Amelia amelia;
 	[HideInInspector]
 	public GameObject atkCollider;
+	private IEnumerator coroutineAtk;
+	int dmg;
+	Text dmgText;
 
 	// Use this for initialization
 	public virtual void Start () {
+		dmgText = GameObject.FindGameObjectWithTag ("DmgText").GetComponent<Text>();
 		anim = GetComponent<Animator> ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
 		if (transform.childCount > 0 && transform.GetChild(0) != null)
@@ -77,7 +82,8 @@ public class Enemy : MonoBehaviour {
 		if (!stateBegun) {
 			stateBegun = true;
 			attackTimeAcc = Time.time + attackTime;
-			StartCoroutine(InstantiateAtk(attackTime*0.85f));
+			coroutineAtk = InstantiateAtk (attackTime * 0.85f);
+			StartCoroutine(coroutineAtk);
 		}
 		if (Time.time > attackTimeAcc) {
 			anim.SetBool ("Attack", false);
@@ -94,11 +100,14 @@ public class Enemy : MonoBehaviour {
 	}
 	public virtual void GetHit() {
 		if (!stateBegun) {
+			dmgText.gameObject.SetActive (true);
+			dmgText.text = dmg.ToString ();
 			stateBegun = true;
 			attackedTimeAcc = Time.time + attackedTime;
 		}
 		if (Time.time > attackedTimeAcc) {
-			life--;
+			dmgText.gameObject.SetActive (false);
+			life -= dmg;
 			anim.SetBool ("Attacked", false);
 			if (id == ID.Wyvern)
 				SwitchState (State.RunningAway, "RunAway");
@@ -108,14 +117,17 @@ public class Enemy : MonoBehaviour {
 
 	} // ou Attacked()
 
-	public virtual void Attacked() { // não tem a ver com o estado Attacked diretamente
+	public virtual void Attacked(int dmg = 1) { // não tem a ver com o estado Attacked diretamente
 		CleanAnimationStateMachine (); // State setado quando atacado e com prioridade maior. Por isso limpa a machine state.
+		this.dmg = dmg;
 		if (Defended () && id == ID.Knight)
 			SwitchState (State.Defending, "Defend");
 		else if (id == ID.Knight) {
+			if (coroutineAtk != null)
+				StopCoroutine (coroutineAtk);
 			SwitchState (State.Attacked, "Attacked"); // vai chamar GetHit por estar no estado Attacked
 		} else if (id == ID.Wyvern) {			
-			SwitchState (State.RunningAway, "Attacked");
+			SwitchState (State.Attacked, "Attacked");
 		}
 	}
 
@@ -157,7 +169,8 @@ public class Enemy : MonoBehaviour {
 		anim.SetBool ("Walk", false);
 		anim.SetBool ("Attacked", false);
 		anim.SetBool ("Defend", false);
-		anim.SetBool ("RunAway", false);
+		if (id != ID.Knight)
+			anim.SetBool ("RunAway", false);
 	}
 
 	public virtual void Wait() {

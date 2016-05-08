@@ -10,9 +10,13 @@ public class TouchController : MonoBehaviour {
 
 	public Text text;
 
+	AtkButton axeButton, swordButton, spearButton;
+
 	// Use this for initialization
 	void Start () {
-	
+		axeButton = GameObject.FindGameObjectWithTag ("AxeButton").GetComponent<AtkButton> ();
+		swordButton = GameObject.FindGameObjectWithTag ("SwordButton").GetComponent<AtkButton>();
+		spearButton = GameObject.FindGameObjectWithTag ("SpearButton").GetComponent<AtkButton>();	
 	}
 	
 	// Update is called once per frame
@@ -35,12 +39,18 @@ public class TouchController : MonoBehaviour {
 							amelia.Jump ();							
 						} else if (buttonTouched == "LeftArrow") {
 							amelia.movingLeft = true;
-						} else if (buttonTouched == "AttackButton") {
+						} /*else if (buttonTouched == "AttackButton") {
 							amelia.Attack ();
-						} else if (buttonTouched == "UpArrow") {
+						}*/ else if (buttonTouched == "UpArrow") {
 							amelia.SwitchWeapon (true);
 						} else if (buttonTouched == "DownArrow") {
 							amelia.SwitchWeapon (false);
+						} else if (buttonTouched == "AxeButton") {
+							axeButton.OnTouch ();
+						} else if (buttonTouched == "SwordButton") {
+							swordButton.OnTouch ();
+						} else if (buttonTouched == "SpearButton") {
+							spearButton.OnTouch ();
 						}
 					}
 					if (buttonTouched == "ClimbButton") {

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Amelia.cs" />
+     <Compile Include="Assets\Scripts\AtkButton.cs" />
      <Compile Include="Assets\Scripts\AtkCollider.cs" />
      <Compile Include="Assets\Scripts\AttackMode.cs" />
      <Compile Include="Assets\Scripts\BackgroundBounds.cs" />

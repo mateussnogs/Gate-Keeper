@@ -35,7 +35,7 @@ public class Amelia : MonoBehaviour {
 	public GameObject downArrowCollider;
 	public GameObject atkButton;
 	public GameObject jumpButton;
-	public GameObject atkCollider;
+	public AtkCollider atkCollider;
 	public GameObject ground2;
 	public GameObject penhasco;
 
@@ -49,6 +49,7 @@ public class Amelia : MonoBehaviour {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), jumpButton.GetComponent<Collider2D>());
 		anim = GetComponent<Animator> ();
 
+		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
 		attackTimes = new Dictionary<AttackMode, float> ();
 		attackTimes.Add (AttackMode.AxeDown, axeDownTime);
 		attackTimes.Add (AttackMode.SpearDown, spearDownTime);
@@ -135,20 +136,26 @@ public class Amelia : MonoBehaviour {
 		GetComponent<Rigidbody2D> ().gravityScale = 2;
 	}
 		
-	public void Attack() {
-			//transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
-			attacking = true;
-			anim.SetBool ("Ground", true);
-			if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
-				anim.Play ("SwordUp");
-			} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
-				anim.Play ("SpearDown");
-			} else if (attackOptions [indexWeapon] == AttackMode.AxeDown) {
-				anim.Play ("AxeDown");
-			}
-			float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
-			StartCoroutine (InstantiateAtkCollider (atkTime/2));
-			StartCoroutine (StopAttackRoutine (atkTime)); 
+	public void Attack(AttackMode atkMode, float atkTime) {
+		attacking = true;
+		anim.SetBool ("Ground", true);
+		atkCollider.atkMode = atkMode;
+		if (atkMode == AttackMode.AxeDown)
+			anim.Play ("AxeDown");
+		else if (atkMode == AttackMode.SpearDown)
+			anim.Play ("SpearDown");
+		else if (atkMode == AttackMode.SwordUp)
+			anim.Play ("SwordUp");
+		/*if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
+			anim.Play ("SwordUp");
+		} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
+			anim.Play ("SpearDown");
+		} else if (attackOptions [indexWeapon] == AttackMode.AxeDown) {
+			anim.Play ("AxeDown");
+		}*/
+		//float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
+		StartCoroutine (InstantiateAtkCollider (atkTime/2));
+		StartCoroutine (StopAttackRoutine (atkTime)); 
 	}
 
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio

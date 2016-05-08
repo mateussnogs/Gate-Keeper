@@ -3,9 +3,12 @@ using System.Collections;
 
 public class KeyboardController : MonoBehaviour {
 	public Amelia amelia;
+	AtkButton axeButton, swordButton, spearButton;
 	// Use this for initialization
 	void Start () {
-	
+		axeButton = GameObject.FindGameObjectWithTag ("AxeButton").GetComponent<AtkButton> ();
+		swordButton = GameObject.FindGameObjectWithTag ("SwordButton").GetComponent<AtkButton>();
+		spearButton = GameObject.FindGameObjectWithTag ("SpearButton").GetComponent<AtkButton>();	
 	}
 	
 	// Update is called once per frame
@@ -17,8 +20,14 @@ public class KeyboardController : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Space))
 			amelia.Jump ();
+		//else if (Input.GetKeyDown (KeyCode.Z))
+		//	amelia.Attack ();
 		else if (Input.GetKeyDown (KeyCode.Z))
-			amelia.Attack ();
+			axeButton.OnTouch ();
+		else if (Input.GetKeyDown (KeyCode.X))
+			swordButton.OnTouch ();
+		else if (Input.GetKeyDown (KeyCode.C))
+			spearButton.OnTouch ();
 		
 		else if (Input.GetKeyDown (KeyCode.LeftArrow))
 			amelia.movingLeft = true;

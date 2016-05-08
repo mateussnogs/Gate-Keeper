@@ -30,9 +30,9 @@ public class MouseController : MonoBehaviour {
 						amelia.Jump ();
 					} else if (buttonTouched == "LeftArrow") {
 						amelia.movingLeft = true;
-					} else if (buttonTouched == "AttackButton") {
+					} /*else if (buttonTouched == "AttackButton") {
 						amelia.Attack ();
-					} else if (buttonTouched == "UpArrow") {
+					}*/ else if (buttonTouched == "UpArrow") {
 						amelia.SwitchWeapon (true);
 					} else if (buttonTouched == "DownArrow") {
 						amelia.SwitchWeapon (false);
