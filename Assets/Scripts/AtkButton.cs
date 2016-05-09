@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class AtkButton : MonoBehaviour {
+public class AtkButton : Button {
 	public enum AtkButtonID{Sword, Axe, Spear};
 	public AtkButtonID id;
 	float timerAcc;
@@ -14,6 +14,7 @@ public class AtkButton : MonoBehaviour {
 	public 
 	// Use this for initialization
 	void Start () {
+		base.Start ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia> ();
 		initialCd = cd;
 		numberCdText.transform.position = transform.position;

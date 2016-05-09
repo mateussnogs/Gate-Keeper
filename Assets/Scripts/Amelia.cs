@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown;
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown;
 	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
 	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
@@ -24,7 +24,7 @@ public class Amelia : MonoBehaviour {
 	public float atkReach;
 	public int life, numPiscadas;
 	public float climbSpeed = 1;
-
+	SpriteRenderer sprite;
 	public GameObject weaponChoosenIcon;
 
 	public float jumpForce = 300f;
@@ -48,6 +48,7 @@ public class Amelia : MonoBehaviour {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), atkButton.GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), jumpButton.GetComponent<Collider2D>());
 		anim = GetComponent<Animator> ();
+		sprite = GetComponent<SpriteRenderer> ();
 
 		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
 		attackTimes = new Dictionary<AttackMode, float> ();
@@ -60,6 +61,11 @@ public class Amelia : MonoBehaviour {
 	void Update () {
 		if (life <= 0)
 			Die ();
+		if (transform.position.y > 2.8)
+			sprite.sortingOrder = -4;
+		else
+			sprite.sortingOrder = 0;
+		
 	}
 
 	void FixedUpdate() {
@@ -118,10 +124,12 @@ public class Amelia : MonoBehaviour {
 		anim.SetBool ("Climbing", true);
 		GetComponent<Rigidbody2D> ().gravityScale = 0;
 		Vector3 destiny;
-		if (up)
+
+		if (up) {
 			destiny = transform.position + new Vector3 (0, 1, 0);
-		else
+		} else {
 			destiny = transform.position + new Vector3 (0, -1, 0);
+		}
 		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * climbSpeed);
 	}
 
@@ -160,13 +168,13 @@ public class Amelia : MonoBehaviour {
 
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
 		yield return new WaitForSeconds (seconds);
-		transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
+		atkCollider.gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 	}
 
 	IEnumerator StopAttackRoutine(float waitTime) {
 		yield return new WaitForSeconds (waitTime);
 		attacking = false;
-		transform.GetChild (1).gameObject.SetActive (false);
+		atkCollider.gameObject.SetActive (false);
 	}
 
 	IEnumerator AttackedFalse(float waitTime) {

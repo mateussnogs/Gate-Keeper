@@ -9,7 +9,6 @@ public class AtkCollider : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print (atkMode);
 	}
 
 
