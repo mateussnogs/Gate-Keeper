@@ -9,7 +9,6 @@ public class AtkCollider : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print (atkMode);
 	}
 
 
@@ -18,13 +17,13 @@ public class AtkCollider : MonoBehaviour {
 		if (gameObject.tag == "AtkAmelia") {
 			if (other.gameObject.tag == "Knight" || other.gameObject.tag == "Enemy") {
 				switch (atkMode) {
-				case AttackMode.SpearDown:
+				case AttackMode.Spear:
 					other.gameObject.GetComponent<Enemy> ().Attacked (1);
 					break;
-				case AttackMode.AxeDown:
+				case AttackMode.Axe:
 					other.gameObject.GetComponent<Enemy> ().Attacked (2);
 					break;
-				case AttackMode.SwordUp:
+				case AttackMode.Sword:
 					other.gameObject.GetComponent<Enemy> ().Attacked (1);
 					break;
 				}

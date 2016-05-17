@@ -1,1 +1,1 @@
-﻿public enum AttackMode {SwordUp, SwordDown, AxeDown, AxeUp, SpearDown, SpearUp};
+﻿public enum AttackMode {Sword, Axe, Spear, ThrowSpear};

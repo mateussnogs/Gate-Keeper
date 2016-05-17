@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown;
-	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown;
+	private AttackMode[] attackOptions = {AttackMode.Axe, AttackMode.Sword, AttackMode.Spear};
 	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
 	private float axeDownTime = 0.75f;
@@ -24,7 +24,7 @@ public class Amelia : MonoBehaviour {
 	public float atkReach;
 	public int life, numPiscadas;
 	public float climbSpeed = 1;
-
+	SpriteRenderer sprite;
 	public GameObject weaponChoosenIcon;
 
 	public float jumpForce = 300f;
@@ -39,6 +39,8 @@ public class Amelia : MonoBehaviour {
 	public GameObject ground2;
 	public GameObject penhasco;
 
+	public GameObject spear;
+
 	// Use this for initialization
 	void Start () {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), rightArrowCollider.GetComponent<Collider2D>());
@@ -48,18 +50,24 @@ public class Amelia : MonoBehaviour {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), atkButton.GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), jumpButton.GetComponent<Collider2D>());
 		anim = GetComponent<Animator> ();
+		sprite = GetComponent<SpriteRenderer> ();
 
 		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
 		attackTimes = new Dictionary<AttackMode, float> ();
-		attackTimes.Add (AttackMode.AxeDown, axeDownTime);
-		attackTimes.Add (AttackMode.SpearDown, spearDownTime);
-		attackTimes.Add (AttackMode.SwordUp, swordUpTime);
+		attackTimes.Add (AttackMode.Axe, axeDownTime);
+		attackTimes.Add (AttackMode.Spear, spearDownTime);
+		attackTimes.Add (AttackMode.Sword, swordUpTime);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (life <= 0)
 			Die ();
+		if (transform.position.y > 2.8)
+			sprite.sortingOrder = -4;
+		else
+			sprite.sortingOrder = 0;
+		
 	}
 
 	void FixedUpdate() {
@@ -118,10 +126,12 @@ public class Amelia : MonoBehaviour {
 		anim.SetBool ("Climbing", true);
 		GetComponent<Rigidbody2D> ().gravityScale = 0;
 		Vector3 destiny;
-		if (up)
+
+		if (up) {
 			destiny = transform.position + new Vector3 (0, 1, 0);
-		else
+		} else {
 			destiny = transform.position + new Vector3 (0, -1, 0);
+		}
 		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * climbSpeed);
 	}
 
@@ -138,14 +148,17 @@ public class Amelia : MonoBehaviour {
 		
 	public void Attack(AttackMode atkMode, float atkTime) {
 		attacking = true;
-		anim.SetBool ("Ground", true);
+		anim.SetBool ("Ground", true); //???? sei la que porra eh essa
 		atkCollider.atkMode = atkMode;
-		if (atkMode == AttackMode.AxeDown)
+		if (atkMode == AttackMode.Axe)
 			anim.Play ("AxeDown");
-		else if (atkMode == AttackMode.SpearDown)
+		else if (atkMode == AttackMode.Spear)
 			anim.Play ("SpearDown");
-		else if (atkMode == AttackMode.SwordUp)
+		else if (atkMode == AttackMode.Sword)
 			anim.Play ("SwordUp");
+		else if (atkMode == AttackMode.ThrowSpear) {
+			ThrowSpear ();
+		}
 		/*if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
 			anim.Play ("SwordUp");
 		} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
@@ -158,15 +171,24 @@ public class Amelia : MonoBehaviour {
 		StartCoroutine (StopAttackRoutine (atkTime)); 
 	}
 
+	public void ThrowSpear() {
+		anim.Play ("ThrowSpear");
+		GameObject s = Instantiate (spear, transform.position, spear.transform.rotation) as GameObject;
+		if (facingRight)
+			s.GetComponent<Spear>().dir = new Vector3 (1, 0, 0);
+		else
+			s.GetComponent<Spear>().dir = new Vector3 (-1, 0, 0);
+	}
+
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
 		yield return new WaitForSeconds (seconds);
-		transform.GetChild (1).gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
+		atkCollider.gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 	}
 
 	IEnumerator StopAttackRoutine(float waitTime) {
 		yield return new WaitForSeconds (waitTime);
 		attacking = false;
-		transform.GetChild (1).gameObject.SetActive (false);
+		atkCollider.gameObject.SetActive (false);
 	}
 
 	IEnumerator AttackedFalse(float waitTime) {

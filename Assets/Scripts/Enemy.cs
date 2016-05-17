@@ -100,13 +100,10 @@ public class Enemy : MonoBehaviour {
 	}
 	public virtual void GetHit() {
 		if (!stateBegun) {
-			dmgText.gameObject.SetActive (true);
-			dmgText.text = dmg.ToString ();
 			stateBegun = true;
 			attackedTimeAcc = Time.time + attackedTime;
 		}
 		if (Time.time > attackedTimeAcc) {
-			dmgText.gameObject.SetActive (false);
 			life -= dmg;
 			anim.SetBool ("Attacked", false);
 			if (id == ID.Wyvern)

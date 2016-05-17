@@ -11,12 +11,16 @@ public class TouchController : MonoBehaviour {
 	public Text text;
 
 	AtkButton axeButton, swordButton, spearButton;
+	Button leftButton, rightButton, jumpButton;
 
 	// Use this for initialization
 	void Start () {
 		axeButton = GameObject.FindGameObjectWithTag ("AxeButton").GetComponent<AtkButton> ();
 		swordButton = GameObject.FindGameObjectWithTag ("SwordButton").GetComponent<AtkButton>();
-		spearButton = GameObject.FindGameObjectWithTag ("SpearButton").GetComponent<AtkButton>();	
+		spearButton = GameObject.FindGameObjectWithTag ("SpearButton").GetComponent<AtkButton>();
+		leftButton = GameObject.FindGameObjectWithTag ("LeftButton").GetComponent<Button> ();
+		rightButton = GameObject.FindGameObjectWithTag ("RightButton").GetComponent<Button> ();
+		jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
 	}
 	
 	// Update is called once per frame
@@ -35,10 +39,13 @@ public class TouchController : MonoBehaviour {
 					if (!amelia.climbing) { // não pode fazer nada se estiver escalando
 						if (buttonTouched == "RightArrow") {
 							amelia.movingRight = true;
+							rightButton.SetTransparent (false);
 						} else if (buttonTouched == "JumpButton") {
-							amelia.Jump ();							
+							amelia.Jump ();					
+							jumpButton.SetTransparent (false);
 						} else if (buttonTouched == "LeftArrow") {
 							amelia.movingLeft = true;
+							leftButton.SetTransparent (false);
 						} /*else if (buttonTouched == "AttackButton") {
 							amelia.Attack ();
 						}*/ else if (buttonTouched == "UpArrow") {
@@ -47,9 +54,12 @@ public class TouchController : MonoBehaviour {
 							amelia.SwitchWeapon (false);
 						} else if (buttonTouched == "AxeButton") {
 							axeButton.OnTouch ();
+							axeButton.SetTransparent (false);
 						} else if (buttonTouched == "SwordButton") {
 							swordButton.OnTouch ();
+							axeButton.SetTransparent (false);
 						} else if (buttonTouched == "SpearButton") {
+							spearButton.SetTransparent (false);
 							spearButton.OnTouch ();
 						}
 					}
