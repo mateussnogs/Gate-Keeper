@@ -1,0 +1,8 @@
+Spawns; Ver arrumação inicial
+Programar lança(lançamento horizontal)
+Botão aceso enquanto pressionado
+Melhorar clareza do número
+Destruição do portão
+Ritmo do tiro do dragão menor
+Diminuir pulo da amelia/Tirar pulo da amelia
+Escudo frágil

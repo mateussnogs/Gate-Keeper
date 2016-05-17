@@ -26,8 +26,6 @@ public class KeyboardController : MonoBehaviour {
 			amelia.Jump ();
 			jumpButton.SetTransparent (false);
 		}
-		//else if (Input.GetKeyDown (KeyCode.Z))
-		//	amelia.Attack ();
 		else if (Input.GetKeyDown (KeyCode.Z))
 			axeButton.OnTouch ();
 		else if (Input.GetKeyDown (KeyCode.X))

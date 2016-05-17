@@ -50,11 +50,13 @@ public class AtkButton : Button {
 	public void OnTouch() {
 		if (cd == initialCd) {
 			if (id == AtkButtonID.Axe)
-				amelia.Attack (AttackMode.AxeDown, 0.75f);
-			else if(id == AtkButtonID.Spear)
-				amelia.Attack (AttackMode.SpearDown, 0.66f);
+				amelia.Attack (AttackMode.Axe, 0.75f);
+			//else if (id == AtkButtonID.Spear)
+			//	amelia.Attack (AttackMode.Spear, 0.66f);
 			else if (id == AtkButtonID.Sword)
-				amelia.Attack (AttackMode.SwordUp, 1);
+				amelia.Attack (AttackMode.Sword, 1);
+			else if (id == AtkButtonID.Spear)
+				amelia.Attack (AttackMode.ThrowSpear, 0.5f);
 			activated = true;
 		}
 	}

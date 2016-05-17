@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
 	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown;
-	private AttackMode[] attackOptions = {AttackMode.AxeDown, AttackMode.SwordUp, AttackMode.SpearDown};
+	private AttackMode[] attackOptions = {AttackMode.Axe, AttackMode.Sword, AttackMode.Spear};
 	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
 	private float axeDownTime = 0.75f;
@@ -39,6 +39,8 @@ public class Amelia : MonoBehaviour {
 	public GameObject ground2;
 	public GameObject penhasco;
 
+	public GameObject spear;
+
 	// Use this for initialization
 	void Start () {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), rightArrowCollider.GetComponent<Collider2D>());
@@ -52,9 +54,9 @@ public class Amelia : MonoBehaviour {
 
 		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
 		attackTimes = new Dictionary<AttackMode, float> ();
-		attackTimes.Add (AttackMode.AxeDown, axeDownTime);
-		attackTimes.Add (AttackMode.SpearDown, spearDownTime);
-		attackTimes.Add (AttackMode.SwordUp, swordUpTime);
+		attackTimes.Add (AttackMode.Axe, axeDownTime);
+		attackTimes.Add (AttackMode.Spear, spearDownTime);
+		attackTimes.Add (AttackMode.Sword, swordUpTime);
 	}
 	
 	// Update is called once per frame
@@ -146,14 +148,17 @@ public class Amelia : MonoBehaviour {
 		
 	public void Attack(AttackMode atkMode, float atkTime) {
 		attacking = true;
-		anim.SetBool ("Ground", true);
+		anim.SetBool ("Ground", true); //???? sei la que porra eh essa
 		atkCollider.atkMode = atkMode;
-		if (atkMode == AttackMode.AxeDown)
+		if (atkMode == AttackMode.Axe)
 			anim.Play ("AxeDown");
-		else if (atkMode == AttackMode.SpearDown)
+		else if (atkMode == AttackMode.Spear)
 			anim.Play ("SpearDown");
-		else if (atkMode == AttackMode.SwordUp)
+		else if (atkMode == AttackMode.Sword)
 			anim.Play ("SwordUp");
+		else if (atkMode == AttackMode.ThrowSpear) {
+			ThrowSpear ();
+		}
 		/*if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
 			anim.Play ("SwordUp");
 		} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
@@ -164,6 +169,15 @@ public class Amelia : MonoBehaviour {
 		//float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
 		StartCoroutine (InstantiateAtkCollider (atkTime/2));
 		StartCoroutine (StopAttackRoutine (atkTime)); 
+	}
+
+	public void ThrowSpear() {
+		anim.Play ("ThrowSpear");
+		GameObject s = Instantiate (spear, transform.position, spear.transform.rotation) as GameObject;
+		if (facingRight)
+			s.GetComponent<Spear>().dir = new Vector3 (1, 0, 0);
+		else
+			s.GetComponent<Spear>().dir = new Vector3 (-1, 0, 0);
 	}
 
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
