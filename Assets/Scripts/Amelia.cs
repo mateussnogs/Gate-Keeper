@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown;
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown, isThrowing;
 	private AttackMode[] attackOptions = {AttackMode.Axe, AttackMode.Sword, AttackMode.Spear};
 	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
@@ -175,9 +175,9 @@ public class Amelia : MonoBehaviour {
 		anim.Play ("ThrowSpear");
 		GameObject s = Instantiate (spear, transform.position, spear.transform.rotation) as GameObject;
 		if (facingRight)
-			s.GetComponent<Spear>().dir = new Vector3 (1, 0, 0);
+			s.GetComponent<ThrowingSpear>().dir = new Vector3 (1, 0, 0);
 		else
-			s.GetComponent<Spear>().dir = new Vector3 (-1, 0, 0);
+			s.GetComponent<ThrowingSpear>().dir = new Vector3 (-1, 0, 0);
 	}
 
 	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio

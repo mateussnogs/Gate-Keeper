@@ -4,7 +4,9 @@ using System.Collections;
 public class AtkCollider : MonoBehaviour {
 	// Use this for initialization
 	public AttackMode atkMode;
+	public Gate gate;
 	void Start () {
+		gate = GameObject.FindGameObjectWithTag ("Gate").GetComponent<Gate> ();
 	}
 	
 	// Update is called once per frame
@@ -21,6 +23,7 @@ public class AtkCollider : MonoBehaviour {
 					other.gameObject.GetComponent<Enemy> ().Attacked (1);
 					break;
 				case AttackMode.Axe:
+					
 					other.gameObject.GetComponent<Enemy> ().Attacked (2);
 					break;
 				case AttackMode.Sword:
@@ -36,7 +39,10 @@ public class AtkCollider : MonoBehaviour {
 				Knight2 knight = transform.parent.gameObject.GetComponent<Knight2> ();
 				if (knight.state != Knight2.State.Attacked)
 					amelia.GetHit ();
+			} else if (other.gameObject.tag == "Gate") {
+				if (transform.parent.gameObject.GetComponent<Knight2>().canHitTower)
+					gate.GetHit (1);
 			}
 		}
-	}
+	}		
 }

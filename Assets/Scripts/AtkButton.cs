@@ -47,16 +47,18 @@ public class AtkButton : Button {
 		}
 	}*/
 
-	public void OnTouch() {
+	public void OnTouch(bool range = false) {
 		if (cd == initialCd) {
 			if (id == AtkButtonID.Axe)
 				amelia.Attack (AttackMode.Axe, 0.75f);
-			//else if (id == AtkButtonID.Spear)
-			//	amelia.Attack (AttackMode.Spear, 0.66f);
 			else if (id == AtkButtonID.Sword)
 				amelia.Attack (AttackMode.Sword, 1);
-			else if (id == AtkButtonID.Spear)
-				amelia.Attack (AttackMode.ThrowSpear, 0.5f);
+			else if (id == AtkButtonID.Spear) {
+				if (range)
+					amelia.Attack (AttackMode.ThrowSpear, 0.5f);
+				else
+					amelia.Attack (AttackMode.Spear, 0.66f);
+			}
 			activated = true;
 		}
 	}

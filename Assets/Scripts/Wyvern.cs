@@ -20,12 +20,12 @@ public class Wyvern : Enemy {
 			Die ();
 	}
 
-	public override bool Move ()
+	public override bool Move (GameObject target)
 	{
-		AmeliaLocation ameliaLocation = FindAmelia ();
-		if (facingRight && ameliaLocation == AmeliaLocation.Left) {
+		TargetLocation ameliaLocation = FindTarget (target);
+		if (facingRight && ameliaLocation == TargetLocation.Left) {
 			ChangeDirection ();
-		} else if (!facingRight && ameliaLocation == AmeliaLocation.Right)
+		} else if (!facingRight && ameliaLocation == TargetLocation.Right)
 			ChangeDirection ();
 		return true;
 	}

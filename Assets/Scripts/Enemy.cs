@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway};
-	public enum AmeliaLocation {Right, Left, Found};
+	public enum TargetLocation {Right, Left, Found}; // em geral vai ser amelia!! Mas pode ser o portão também...
 	[HideInInspector]
 	public enum ID {Wyvern, Knight, Unknown};
 	public int life;
@@ -25,12 +25,14 @@ public class Enemy : MonoBehaviour {
 	private IEnumerator coroutineAtk;
 	int dmg;
 	Text dmgText;
+	public GameObject target;
 
 	// Use this for initialization
 	public virtual void Start () {
 		dmgText = GameObject.FindGameObjectWithTag ("DmgText").GetComponent<Text>();
 		anim = GetComponent<Animator> ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
+		target = amelia.gameObject;
 		if (transform.childCount > 0 && transform.GetChild(0) != null)
 			atkCollider = transform.GetChild (0).gameObject;
 	}
@@ -68,7 +70,7 @@ public class Enemy : MonoBehaviour {
 			anim.SetBool ("Walk", false);
 			SwitchState (State.Waiting, "Stand");
 		} else {
-			bool changeState = Move (); // true quando achou a amelia, aí é pra atacar
+			bool changeState = Move (target); // true quando achou a amelia, aí é pra atacar
 			if (changeState) {
 				anim.SetBool ("Walk", false);
 				SwitchState (State.Attacking, "Attack");
@@ -229,15 +231,15 @@ public class Enemy : MonoBehaviour {
 		anim.SetBool (varCond, curValue);
 	}
 
-	public virtual bool Move() { // retorna true se for pra mudar de estado(quando acha a vagabunda)		
+	public virtual bool Move(GameObject target) { // retorna true se for pra mudar de estado(quando acha a vagabunda)		
 		Vector3 origin = transform.position;
 		Vector3 destiny = origin;
-		AmeliaLocation ameliaLocation = FindAmelia ();
-		if (facingRight && ameliaLocation == AmeliaLocation.Left) {
+		TargetLocation ameliaLocation = FindTarget (target);
+		if (facingRight && ameliaLocation == TargetLocation.Left) {
 			ChangeDirection ();
-		} else if (!facingRight && ameliaLocation == AmeliaLocation.Right)
+		} else if (!facingRight && ameliaLocation == TargetLocation.Right)
 			ChangeDirection ();
-		else if (ameliaLocation == AmeliaLocation.Found)
+		else if (ameliaLocation == TargetLocation.Found)
 			return true;
 		if (facingRight)
 			destiny = origin + new Vector3 (1, 0, 0);
@@ -248,13 +250,13 @@ public class Enemy : MonoBehaviour {
 		return false;
 	}
 
-	public virtual AmeliaLocation FindAmelia() {
-		if (amelia.transform.position.x > transform.position.x + distanceToStop)
-			return AmeliaLocation.Right;
-		else if (amelia.transform.position.x < transform.position.x - distanceToStop)
-			return AmeliaLocation.Left;
+	public virtual TargetLocation FindTarget(GameObject target) {
+		if (target.transform.position.x > transform.position.x + distanceToStop)
+			return TargetLocation.Right;
+		else if (target.transform.position.x < transform.position.x - distanceToStop)
+			return TargetLocation.Left;
 		else
-			return AmeliaLocation.Found;
+			return TargetLocation.Found;
 	}
 
 	public virtual void ChangeDirection() {

@@ -5,6 +5,8 @@ public class KeyboardController : MonoBehaviour {
 	public Amelia amelia;
 	AtkButton axeButton, swordButton, spearButton;
 	Button leftArrowButton, rightArrowButton, jumpButton;
+	float spearPressedTime, spearTimeAcc;
+	bool spearPressed;
 	// Use this for initialization
 	void Start () {
 		axeButton = GameObject.FindGameObjectWithTag ("AxeButton").GetComponent<AtkButton> ();
@@ -25,13 +27,14 @@ public class KeyboardController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			amelia.Jump ();
 			jumpButton.SetTransparent (false);
-		}
-		else if (Input.GetKeyDown (KeyCode.Z))
+		} else if (Input.GetKeyDown (KeyCode.Z))
 			axeButton.OnTouch ();
 		else if (Input.GetKeyDown (KeyCode.X))
 			swordButton.OnTouch ();
-		else if (Input.GetKeyDown (KeyCode.C))
-			spearButton.OnTouch ();
+		else if (Input.GetKeyDown (KeyCode.C)) {
+			spearTimeAcc = Time.time;
+			amelia.anim.SetBool ("ThrowingSpear", true);
+		}
 		else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			amelia.movingLeft = true;
 			leftArrowButton.SetTransparent (false);
@@ -44,7 +47,14 @@ public class KeyboardController : MonoBehaviour {
 			amelia.movingLeft = false;
 		if (Input.GetKeyUp (KeyCode.RightArrow))
 			amelia.movingRight = false;
-
+		
+		if (Input.GetKeyUp (KeyCode.C)) {
+			amelia.anim.SetBool ("ThrowingSpear", false);
+			if ((Time.time - spearTimeAcc) >= 1)
+				spearButton.OnTouch (true);
+			else
+				spearButton.OnTouch (false);
+		}
 
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
 			if (amelia.canClimbUp) {

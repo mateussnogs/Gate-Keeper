@@ -13,6 +13,8 @@ public class TouchController : MonoBehaviour {
 	AtkButton axeButton, swordButton, spearButton;
 	Button leftButton, rightButton, jumpButton;
 
+	float spearTimeAcc;
+
 	// Use this for initialization
 	void Start () {
 		axeButton = GameObject.FindGameObjectWithTag ("AxeButton").GetComponent<AtkButton> ();
@@ -33,7 +35,7 @@ public class TouchController : MonoBehaviour {
 					                   Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer ("Button"));
 				buttonTouched = hit.collider.gameObject.name;
 				//text.text = buttonTouched;
-				if (buttonTouched == "LeftArrow" || buttonTouched == "RightArrow")
+				if (buttonTouched == "LeftArrow" || buttonTouched == "RightArrow" || buttonTouched == "SpearButton")
 					touchedButtons.Add (buttonTouched);
 				if (hit.collider != null) {
 					if (!amelia.climbing) { // não pode fazer nada se estiver escalando
@@ -59,8 +61,9 @@ public class TouchController : MonoBehaviour {
 							swordButton.OnTouch ();
 							axeButton.SetTransparent (false);
 						} else if (buttonTouched == "SpearButton") {
+							amelia.anim.SetBool ("ThrowingSpear", true);
+							spearTimeAcc = Time.time;
 							spearButton.SetTransparent (false);
-							spearButton.OnTouch ();
 						}
 					}
 					if (buttonTouched == "ClimbButton") {
@@ -85,6 +88,14 @@ public class TouchController : MonoBehaviour {
 					case "RightArrow":
 						touchedButtons.Remove (touchedButtons [i]);
 						amelia.movingRight = false;
+						break;
+					case "SpearButton":
+						if ((Time.time - spearTimeAcc) >= 1)
+							spearButton.OnTouch (true);
+						else
+							spearButton.OnTouch (false);
+						touchedButtons.Remove (touchedButtons [i]);
+						amelia.anim.SetBool ("ThrowingSpear", false);
 						break;
 				}
 

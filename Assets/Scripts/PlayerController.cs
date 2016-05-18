@@ -33,8 +33,7 @@ public class PlayerController : MonoBehaviour {
 				amelia.Climb (true);
 			else
 				amelia.Climb (false);
-		}
-		else {
+		}else {
 			amelia.anim.SetBool ("Moving", false);
 		}
 	}
