@@ -7,11 +7,13 @@ public class TouchController : MonoBehaviour {
 	public Amelia amelia;
 	string buttonTouched;
 	List<string> touchedButtons = new List<string>();
+	Dictionary<int, string> touchesIds = new Dictionary<int, string> ();
 
-	public Text text;
+	public Text text1;
+	public Text text2;
 
 	AtkButton axeButton, swordButton, spearButton;
-	Button leftButton, rightButton, jumpButton;
+	Button leftButton, rightButton, jumpButton, defendButton;
 
 	float spearTimeAcc;
 
@@ -23,6 +25,7 @@ public class TouchController : MonoBehaviour {
 		leftButton = GameObject.FindGameObjectWithTag ("LeftButton").GetComponent<Button> ();
 		rightButton = GameObject.FindGameObjectWithTag ("RightButton").GetComponent<Button> ();
 		jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
+		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<Button> ();
 	}
 	
 	// Update is called once per frame
@@ -35,8 +38,10 @@ public class TouchController : MonoBehaviour {
 					                   Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer ("Button"));
 				buttonTouched = hit.collider.gameObject.name;
 				//text.text = buttonTouched;
-				if (buttonTouched == "LeftArrow" || buttonTouched == "RightArrow" || buttonTouched == "SpearButton")
-					touchedButtons.Add (buttonTouched);
+				if (buttonTouched == "LeftArrow" || buttonTouched == "RightArrow") {
+					//touchedButtons.Add (buttonTouched);
+					touchesIds [touch.fingerId] = buttonTouched;
+				}
 				if (hit.collider != null) {
 					if (!amelia.climbing) { // não pode fazer nada se estiver escalando
 						if (buttonTouched == "RightArrow") {
@@ -45,6 +50,9 @@ public class TouchController : MonoBehaviour {
 						} else if (buttonTouched == "JumpButton") {
 							amelia.Jump ();					
 							jumpButton.SetTransparent (false);
+						} else if (buttonTouched == "DefendButton") {
+							amelia.Defend ();
+							defendButton.SetTransparent (false);
 						} else if (buttonTouched == "LeftArrow") {
 							amelia.movingLeft = true;
 							leftButton.SetTransparent (false);
@@ -59,11 +67,16 @@ public class TouchController : MonoBehaviour {
 							axeButton.SetTransparent (false);
 						} else if (buttonTouched == "SwordButton") {
 							swordButton.OnTouch ();
-							axeButton.SetTransparent (false);
+							swordButton.SetTransparent (false);
 						} else if (buttonTouched == "SpearButton") {
-							amelia.anim.SetBool ("ThrowingSpear", true);
-							spearTimeAcc = Time.time;
-							spearButton.SetTransparent (false);
+							if (spearButton.CanAct ()) {
+								amelia.isThrowing = true;
+								touchesIds [touch.fingerId] = buttonTouched;
+								amelia.movingLeft = amelia.movingRight = false;
+								amelia.anim.SetBool ("ThrowingSpear", true);
+								spearTimeAcc = Time.time;
+								spearButton.SetTransparent (false);
+							}
 						}
 					}
 					if (buttonTouched == "ClimbButton") {
@@ -77,8 +90,37 @@ public class TouchController : MonoBehaviour {
 			}
 		}
 		//DisplayTouchList ();
-		for (int i = 0; i < Input.touchCount; i++) {
+
+		foreach (Touch touch in Input.touches) {
+			if (touch.phase == TouchPhase.Ended) {
+				string buttonToRemove = touchesIds[touch.fingerId];
+				switch(buttonToRemove) {
+					case "LeftArrow":
+						touchesIds.Remove (touch.fingerId);
+						amelia.movingLeft = false;
+						break;
+					case "RightArrow":
+						touchesIds.Remove (touch.fingerId);
+						amelia.movingRight = false;
+						break;
+				case "SpearButton":
+					touchesIds.Remove (touch.fingerId);
+					amelia.isThrowing = false;
+						if ((Time.time - spearTimeAcc) >= 0.4f) {
+							spearButton.OnTouch (true);
+							amelia.anim.Play ("ThrowSpear");
+						} else {
+							spearButton.OnTouch (false);
+						}				
+						amelia.anim.SetBool ("ThrowingSpear", false);
+						break;
+				}
+			}
+		}
+
+		/*for (int i = 0; i < Input.touchCount; i++) {
 			Touch touch = Input.GetTouch (i);
+			//text2.text = touch.fingerId.ToString();
 			if (touch.phase == TouchPhase.Ended) {
 				switch(touchedButtons[i]) {
 					case "LeftArrow":
@@ -90,23 +132,24 @@ public class TouchController : MonoBehaviour {
 						amelia.movingRight = false;
 						break;
 					case "SpearButton":
-						if ((Time.time - spearTimeAcc) >= 1)
+						if ((Time.time - spearTimeAcc) >= 0.4f) {
 							spearButton.OnTouch (true);
-						else
+							amelia.anim.Play ("ThrowSpear");
+						} else {
 							spearButton.OnTouch (false);
-						touchedButtons.Remove (touchedButtons [i]);
+						}
+						touchedButtons.Remove (touchedButtons [i]);						
 						amelia.anim.SetBool ("ThrowingSpear", false);
 						break;
 				}
-
 			}
-		}
+		}*/
 	}
 
 	void DisplayTouchList() {
 		string r = "";
 		foreach (string s in touchedButtons)
 			r += " " + s;
-		text.text = r;
+		text1.text = r;
 	}
 }

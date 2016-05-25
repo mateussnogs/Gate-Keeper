@@ -48,7 +48,7 @@ public class AtkButton : Button {
 	}*/
 
 	public void OnTouch(bool range = false) {
-		if (cd == initialCd) {
+		if (CanAct()) {
 			if (id == AtkButtonID.Axe)
 				amelia.Attack (AttackMode.Axe, 0.75f);
 			else if (id == AtkButtonID.Sword)
@@ -61,5 +61,11 @@ public class AtkButton : Button {
 			}
 			activated = true;
 		}
+	}
+
+	public bool CanAct() {
+		if (cd == initialCd)
+			return true;
+		return false;
 	}
 }

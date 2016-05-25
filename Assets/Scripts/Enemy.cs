@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour {
 		if (!stateBegun) {
 			stateBegun = true;
 			attackTimeAcc = Time.time + attackTime;
-			coroutineAtk = InstantiateAtk (attackTime * 0.85f);
+			coroutineAtk = InstantiateAtk (attackTime * 0.7f);
 			StartCoroutine(coroutineAtk);
 		}
 		if (Time.time > attackTimeAcc) {

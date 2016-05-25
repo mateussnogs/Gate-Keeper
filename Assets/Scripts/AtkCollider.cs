@@ -11,19 +11,19 @@ public class AtkCollider : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
 	}
 
 
 	void OnTriggerEnter2D(Collider2D other) {
 		
-		if (gameObject.tag == "AtkAmelia") {
+		if (gameObject.tag == "AtkAmelia") {			
 			if (other.gameObject.tag == "Knight" || other.gameObject.tag == "Enemy") {
 				switch (atkMode) {
 				case AttackMode.Spear:
 					other.gameObject.GetComponent<Enemy> ().Attacked (1);
 					break;
-				case AttackMode.Axe:
-					
+				case AttackMode.Axe:					
 					other.gameObject.GetComponent<Enemy> ().Attacked (2);
 					break;
 				case AttackMode.Sword:
@@ -38,10 +38,12 @@ public class AtkCollider : MonoBehaviour {
 				Amelia amelia = other.gameObject.GetComponent<Amelia> ();
 				Knight2 knight = transform.parent.gameObject.GetComponent<Knight2> ();
 				if (knight.state != Knight2.State.Attacked)
-					amelia.GetHit ();
+					amelia.GetHit (knight.gameObject);
 			} else if (other.gameObject.tag == "Gate") {
-				if (transform.parent.gameObject.GetComponent<Knight2>().canHitTower)
+				if (transform.parent.gameObject.GetComponent<Knight2> ().canHitTower)
 					gate.GetHit (1);
+			} else if (other.gameObject.tag == "ShieldBlock") {
+				
 			}
 		}
 	}		

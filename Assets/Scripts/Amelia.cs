@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Amelia : MonoBehaviour {
-	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown, isThrowing;
+	public bool jumping, movingRight, movingLeft, facingRight, attacking, grounded, attacked, climbingUp, climbingDown, climbing, canClimbUp, canClimbDown, isUp, isDown, isThrowing, isShielded;
 	private AttackMode[] attackOptions = {AttackMode.Axe, AttackMode.Sword, AttackMode.Spear};
 	private float swordUpTime = 1;
 	private float spearDownTime = 0.66f;
 	private float axeDownTime = 0.75f;
+	public float defendTime = 0.5f;
 	private Dictionary<AttackMode, float> attackTimes;
 	public int numWeapons = 3;
 	private int indexWeapon = 2;
@@ -40,6 +41,7 @@ public class Amelia : MonoBehaviour {
 	public GameObject penhasco;
 
 	public GameObject spear;
+	public GameObject shield;
 
 	// Use this for initialization
 	void Start () {
@@ -53,6 +55,7 @@ public class Amelia : MonoBehaviour {
 		sprite = GetComponent<SpriteRenderer> ();
 
 		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
+		shield = transform.GetChild (1).gameObject;
 		attackTimes = new Dictionary<AttackMode, float> ();
 		attackTimes.Add (AttackMode.Axe, axeDownTime);
 		attackTimes.Add (AttackMode.Spear, spearDownTime);
@@ -96,7 +99,8 @@ public class Amelia : MonoBehaviour {
 				destiny = origin + new Vector3 (distToWalk, 0, 0);
 			else
 				destiny = origin;
-			transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
+			if (!isThrowing) // pode até mudar de direção, mas não se move enquanto estiver preparando para lançar
+				transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * speed);
 		}
 	}
 
@@ -171,6 +175,18 @@ public class Amelia : MonoBehaviour {
 		StartCoroutine (StopAttackRoutine (atkTime)); 
 	}
 
+	public void Defend() {
+		shield.SetActive (true);
+		StartCoroutine(DeactivateShield (defendTime));
+		isShielded = true;
+	}
+
+	public IEnumerator DeactivateShield(float time) {
+		yield return new WaitForSeconds (time);
+		isShielded = false;
+		shield.SetActive (false);
+	}
+
 	public void ThrowSpear() {
 		anim.Play ("ThrowSpear");
 		GameObject s = Instantiate (spear, transform.position, spear.transform.rotation) as GameObject;
@@ -210,11 +226,15 @@ public class Amelia : MonoBehaviour {
 		}
 	}
 
-	public void GetHit() {
-		life--;
-		StartCoroutine (PiscaVermelho ());
-		attacked = true;
-		StartCoroutine (AttackedFalse (0.5f));
+	public void GetHit(GameObject enemy) {
+		if (!isShielded || (isShielded && ((facingRight && enemy.transform.position.x < transform.position.x)// caso em que tem shield
+			|| (!facingRight && enemy.transform.position.x > transform.position.x)))) {		  //  mas não na direção do atk
+			life--;
+			StartCoroutine (PiscaVermelho ());
+			attacked = true;
+			StartCoroutine (AttackedFalse (0.5f));
+		}
+
 	}
 
 	public void IgnoraColisaoPenhasco() {
