@@ -10,7 +10,6 @@ public class Amelia : MonoBehaviour {
 	private float spearDownTime = 0.66f;
 	private float axeDownTime = 0.75f;
 	public float defendTime = 0.5f;
-	private Dictionary<AttackMode, float> attackTimes;
 	public int numWeapons = 3;
 	private int indexWeapon = 2;
 	public float speed = 1f;
@@ -28,6 +27,7 @@ public class Amelia : MonoBehaviour {
 	SpriteRenderer sprite;
 	public GameObject weaponChoosenIcon;
 
+
 	public float jumpForce = 300f;
 
 	public GameObject rightArrowCollider;
@@ -36,30 +36,28 @@ public class Amelia : MonoBehaviour {
 	public GameObject downArrowCollider;
 	public GameObject atkButton;
 	public GameObject jumpButton;
-	public AtkCollider atkCollider;
+	public AtkColliderAmelia atkCollider;
 	public GameObject ground2;
 	public GameObject penhasco;
 
-	public GameObject spear;
+	public Spear spear;
+	public Sword sword;
+	public Axe axe;
+	public GameObject spearGO;
 	public GameObject shield;
 
 	// Use this for initialization
 	void Start () {
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), rightArrowCollider.GetComponent<Collider2D>());
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), leftArrowCollider.GetComponent<Collider2D>());
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), upArrowCollider.GetComponent<Collider2D>());
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), downArrowCollider.GetComponent<Collider2D>());
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), atkButton.GetComponent<Collider2D>());
-		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), jumpButton.GetComponent<Collider2D>());
+		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Button"));
 		anim = GetComponent<Animator> ();
 		sprite = GetComponent<SpriteRenderer> ();
 
-		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkCollider>();
+		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkColliderAmelia>();
 		shield = transform.GetChild (1).gameObject;
-		attackTimes = new Dictionary<AttackMode, float> ();
-		attackTimes.Add (AttackMode.Axe, axeDownTime);
-		attackTimes.Add (AttackMode.Spear, spearDownTime);
-		attackTimes.Add (AttackMode.Sword, swordUpTime);
+
+		spear = new Spear (this, 1, 0.66f, spearGO);
+		sword = new Sword (this, 1, 1);
+		axe = new Axe (this, 2, 1);
 	}
 	
 	// Update is called once per frame
@@ -150,29 +148,19 @@ public class Amelia : MonoBehaviour {
 		GetComponent<Rigidbody2D> ().gravityScale = 2;
 	}
 		
-	public void Attack(AttackMode atkMode, float atkTime) {
+	public void Attack(AttackMode atkMode) {
 		attacking = true;
 		anim.SetBool ("Ground", true); //???? sei la que porra eh essa
 		atkCollider.atkMode = atkMode;
 		if (atkMode == AttackMode.Axe)
-			anim.Play ("AxeDown");
+			axe.Attack ();
 		else if (atkMode == AttackMode.Spear)
-			anim.Play ("SpearDown");
+			spear.Attack ();
 		else if (atkMode == AttackMode.Sword)
-			anim.Play ("SwordUp");
+			sword.Attack ();
 		else if (atkMode == AttackMode.ThrowSpear) {
-			ThrowSpear ();
+			spear.Throw ();
 		}
-		/*if (attackOptions [indexWeapon] == AttackMode.SwordUp) {
-			anim.Play ("SwordUp");
-		} else if (attackOptions [indexWeapon] == AttackMode.SpearDown) {
-			anim.Play ("SpearDown");
-		} else if (attackOptions [indexWeapon] == AttackMode.AxeDown) {
-			anim.Play ("AxeDown");
-		}*/
-		//float atkTime = attackTimes [attackOptions [indexWeapon]]; //pega o tempo do atk pelo dicionário
-		StartCoroutine (InstantiateAtkCollider (atkTime/2));
-		StartCoroutine (StopAttackRoutine (atkTime)); 
 	}
 
 	public void Defend() {
@@ -188,20 +176,15 @@ public class Amelia : MonoBehaviour {
 	}
 
 	public void ThrowSpear() {
-		anim.Play ("ThrowSpear");
-		GameObject s = Instantiate (spear, transform.position, spear.transform.rotation) as GameObject;
-		if (facingRight)
-			s.GetComponent<ThrowingSpear>().dir = new Vector3 (1, 0, 0);
-		else
-			s.GetComponent<ThrowingSpear>().dir = new Vector3 (-1, 0, 0);
+		
 	}
 
-	IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
+	public IEnumerator InstantiateAtkCollider(float seconds) { //Pra não instanciar direto, senão fica feio
 		yield return new WaitForSeconds (seconds);
 		atkCollider.gameObject.SetActive (true); // bota o Atk collider pra ficar ativo
 	}
 
-	IEnumerator StopAttackRoutine(float waitTime) {
+	public IEnumerator StopAttackRoutine(float waitTime) {
 		yield return new WaitForSeconds (waitTime);
 		attacking = false;
 		atkCollider.gameObject.SetActive (false);

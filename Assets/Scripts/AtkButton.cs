@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class AtkButton : Button {
-	public enum AtkButtonID{Sword, Axe, Spear};
+	public enum AtkButtonID{Sword, Axe, Spear, Shield};
 	public AtkButtonID id;
 	float timerAcc;
 	float initialCd;
@@ -48,17 +48,19 @@ public class AtkButton : Button {
 	}*/
 
 	public void OnTouch(bool range = false) {
+		SetTransparent (false);
 		if (CanAct()) {
 			if (id == AtkButtonID.Axe)
-				amelia.Attack (AttackMode.Axe, 0.75f);
+				amelia.Attack (AttackMode.Axe);
 			else if (id == AtkButtonID.Sword)
-				amelia.Attack (AttackMode.Sword, 1);
+				amelia.Attack (AttackMode.Sword);
 			else if (id == AtkButtonID.Spear) {
 				if (range)
-					amelia.Attack (AttackMode.ThrowSpear, 0.5f);
+					amelia.Attack (AttackMode.ThrowSpear);
 				else
-					amelia.Attack (AttackMode.Spear, 0.66f);
-			}
+					amelia.Attack (AttackMode.Spear);
+			} else if (id == AtkButtonID.Shield)
+				amelia.Defend ();
 			activated = true;
 		}
 	}

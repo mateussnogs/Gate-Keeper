@@ -18,13 +18,13 @@ public class AtkColliderAmelia : MonoBehaviour {
 			if (other.gameObject.tag == "Knight" || other.gameObject.tag == "Enemy") {
 				switch (atkMode) {
 				case AttackMode.Spear:
-					other.gameObject.GetComponent<Enemy> ().Attacked (1);
+				other.gameObject.GetComponent<Enemy> ().Attacked (1, Spear.weaponBreakChance);
 					break;
 				case AttackMode.Axe:					
-					other.gameObject.GetComponent<Enemy> ().Attacked (2);
+				other.gameObject.GetComponent<Enemy> ().Attacked (2, Axe.weaponBreakChance);
 					break;
-				case AttackMode.Sword:
-					other.gameObject.GetComponent<Enemy> ().Attacked (1);
+			case AttackMode.Sword:
+				other.gameObject.GetComponent<Enemy> ().Attacked (1, Sword.weaponBreakChance);
 					break;
 				}
 			}

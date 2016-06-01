@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway};
@@ -29,6 +30,7 @@ public class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	public virtual void Start () {
+		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Enemy"), LayerMask.NameToLayer ("Button"));
 		dmgText = GameObject.FindGameObjectWithTag ("DmgText").GetComponent<Text>();
 		anim = GetComponent<Animator> ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
@@ -116,10 +118,10 @@ public class Enemy : MonoBehaviour {
 
 	} // ou Attacked()
 
-	public virtual void Attacked(int dmg = 1) { // não tem a ver com o estado Attacked diretamente
+	public virtual void Attacked(int dmg = 1, int weaponBreakChance = 0) { // não tem a ver com o estado Attacked diretamente
 		CleanAnimationStateMachine (); // State setado quando atacado e com prioridade maior. Por isso limpa a machine state.
 		this.dmg = dmg;
-		if (Defended () && id == ID.Knight)
+		if (Defended (weaponBreakChance) && id == ID.Knight)
 			SwitchState (State.Defending, "Defend");
 		else if (id == ID.Knight) {
 			if (coroutineAtk != null)
@@ -150,13 +152,13 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public virtual bool Defended() {
+	public virtual bool Defended(int weaponBreakChance) {
 		int roll = Random.Range (1, 11);
 		if (state == State.Attacking || (amelia.facingRight && facingRight) //Se estiver atacando, ou olhando para lado contrário
 			|| (!amelia.facingRight && !facingRight)) { 						// Não defende certamente!
 			return false;
 		}
-		else if (roll >= 5) { // 60% de defender
+		else if (roll >= 5 + weaponBreakChance) { // 60% de defender a princípio
 			return true;
 		} else
 			return false;

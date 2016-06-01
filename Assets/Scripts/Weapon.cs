@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Weapon : MonoBehaviour {
+public class Weapon {
 	public float atkTime;
-	public enum WeaponType {MELEE, RANGE};
-	public AttackMode atkMode;
 	public int dmg;
+	public Amelia amelia;
 	// Use this for initialization
-	void Start () {
-	
+	public Weapon(Amelia amelia, int dmg, float atkTime) {
+		this.dmg = dmg;
+		this.atkTime = atkTime;
+		this.amelia = amelia;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public virtual void Attack() {
+		
 	}
 }

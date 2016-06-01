@@ -3,8 +3,8 @@ using System.Collections;
 
 public class KeyboardController : MonoBehaviour {
 	public Amelia amelia;
-	AtkButton axeButton, swordButton, spearButton;
-	Button leftArrowButton, rightArrowButton, jumpButton, defendButton;
+	AtkButton axeButton, swordButton, spearButton, defendButton;
+	Button leftArrowButton, rightArrowButton, jumpButton;
 	float spearPressedTime, spearTimeAcc;
 	bool spearPressed;
 	// Use this for initialization
@@ -15,7 +15,7 @@ public class KeyboardController : MonoBehaviour {
 		leftArrowButton = GameObject.FindGameObjectWithTag ("LeftButton").GetComponent<Button> ();
 		rightArrowButton = GameObject.FindGameObjectWithTag ("RightButton").GetComponent<Button> ();
 		jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
-		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<Button> ();
+		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<AtkButton> ();
 	}
 	
 	// Update is called once per frame
@@ -36,8 +36,7 @@ public class KeyboardController : MonoBehaviour {
 			spearTimeAcc = Time.time;
 			amelia.anim.SetBool ("ThrowingSpear", true);
 		} else if (Input.GetKeyDown (KeyCode.D)) {
-			amelia.Defend ();
-			defendButton.SetTransparent (false);
+			defendButton.OnTouch ();
 		}
 		else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 			amelia.movingLeft = true;

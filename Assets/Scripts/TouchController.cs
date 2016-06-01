@@ -12,8 +12,8 @@ public class TouchController : MonoBehaviour {
 	public Text text1;
 	public Text text2;
 
-	AtkButton axeButton, swordButton, spearButton;
-	Button leftButton, rightButton, jumpButton, defendButton;
+	AtkButton axeButton, swordButton, spearButton, defendButton;
+	Button leftButton, rightButton, jumpButton;
 
 	float spearTimeAcc;
 
@@ -25,7 +25,7 @@ public class TouchController : MonoBehaviour {
 		leftButton = GameObject.FindGameObjectWithTag ("LeftButton").GetComponent<Button> ();
 		rightButton = GameObject.FindGameObjectWithTag ("RightButton").GetComponent<Button> ();
 		jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
-		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<Button> ();
+		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<AtkButton> ();
 	}
 	
 	// Update is called once per frame
@@ -51,8 +51,7 @@ public class TouchController : MonoBehaviour {
 							amelia.Jump ();					
 							jumpButton.SetTransparent (false);
 						} else if (buttonTouched == "DefendButton") {
-							amelia.Defend ();
-							defendButton.SetTransparent (false);
+							defendButton.OnTouch ();
 						} else if (buttonTouched == "LeftArrow") {
 							amelia.movingLeft = true;
 							leftButton.SetTransparent (false);
@@ -64,10 +63,8 @@ public class TouchController : MonoBehaviour {
 							amelia.SwitchWeapon (false);
 						} else if (buttonTouched == "AxeButton") {
 							axeButton.OnTouch ();
-							axeButton.SetTransparent (false);
 						} else if (buttonTouched == "SwordButton") {
 							swordButton.OnTouch ();
-							swordButton.SetTransparent (false);
 						} else if (buttonTouched == "SpearButton") {
 							if (spearButton.CanAct ()) {
 								amelia.isThrowing = true;
@@ -75,7 +72,6 @@ public class TouchController : MonoBehaviour {
 								amelia.movingLeft = amelia.movingRight = false;
 								amelia.anim.SetBool ("ThrowingSpear", true);
 								spearTimeAcc = Time.time;
-								spearButton.SetTransparent (false);
 							}
 						}
 					}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ThrowingSpear : Weapon {
+public class ThrowingSpear : MonoBehaviour {
 	[HideInInspector]
 	public Vector3 dir;
 	public float speed;

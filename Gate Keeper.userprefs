@@ -1,9 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TouchController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Amelia.cs">
     <Files>
-      <File FileName="Assets\Scripts\Amelia.cs" Line="231" Column="76" />
-      <File FileName="Assets\Scripts\TouchController.cs" Line="41" Column="73" />
+      <File FileName="Assets\Scripts\Knight2.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Sword.cs" Line="18" Column="66" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="33" Column="3" />
+      <File FileName="Assets\Scripts\Amelia.cs" Line="51" Column="65" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -29,7 +29,7 @@ public class Fireball : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Amelia") {
+		if (other.gameObject.tag == "Amelia" || other.gameObject.tag == "ShieldBlock") {
 			amelia.GetHit (gameObject);
 			Destroy (gameObject);
 		}
