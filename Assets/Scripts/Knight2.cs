@@ -4,8 +4,13 @@ using System.Collections;
 public class Knight2 : Enemy {
 	public GameObject gate;
 	public bool canHitTower = false;
+	public float stunnedTime;
+	float stunnedTimeAcc;
+	GameObject atkReflect;
+
 	void Start() {
 		gate = GameObject.FindGameObjectWithTag ("Gate");
+		atkReflect = transform.GetChild (1).gameObject;
 		base.Start ();
 		id = ID.Knight;
 	}
@@ -33,6 +38,26 @@ public class Knight2 : Enemy {
 		return false;
 	}
 
+	public void Stun() {
+		AtkReflect ();
+		CleanAnimationStateMachine (); // State setado quando atacado e com prioridade maior. Por isso limpa a machine state.
+		SwitchState (State.Stunned, "Stunned");
+	}
+	public override void Stunned() {		
+		if (!stateBegun) {			
+			stateBegun = true;
+			stunnedTimeAcc = Time.time + stunnedTime;
+		}
+		if (Time.time > stunnedTimeAcc) {
+			anim.SetBool ("Stunned", false);
+			SwitchState (State.Waiting, "Stand");
+		}
+
+	} // ou Attacked()
+
+	void AtkReflect() {
+		atkReflect.GetComponent<Animator> ().Play ("AtkReflect");
+	}
 
 	
 }

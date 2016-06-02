@@ -12,7 +12,7 @@ public class Sword : Weapon {
 		amelia.anim.Play ("SwordUp");
 		float timeFirstAtk = 0.1f;
 		float timeStopFirstAtk = timeFirstAtk + 0.2f;
-		float timeSecondAtk = 0.5f;
+		float timeSecondAtk = 0.6f;
 		float timeStopSecondAtk = atkTime;
 
 		amelia.StartCoroutine (InstantiateAtkCollider (timeFirstAtk, -5));

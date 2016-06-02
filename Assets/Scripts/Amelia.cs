@@ -45,6 +45,7 @@ public class Amelia : MonoBehaviour {
 	public Axe axe;
 	public GameObject spearGO;
 	public GameObject shield;
+	GameObject protection;
 
 	// Use this for initialization
 	void Start () {
@@ -54,6 +55,7 @@ public class Amelia : MonoBehaviour {
 
 		atkCollider = transform.GetChild (0).gameObject.GetComponent<AtkColliderAmelia>();
 		shield = transform.GetChild (1).gameObject;
+		protection = transform.GetChild (2).gameObject;
 
 		spear = new Spear (this, 1, 0.66f, spearGO);
 		sword = new Sword (this, 1, 1);
@@ -164,6 +166,7 @@ public class Amelia : MonoBehaviour {
 	}
 
 	public void Defend() {
+		protection.GetComponent<Animator> ().Play ("AmeliaProtection");
 		shield.SetActive (true);
 		StartCoroutine(DeactivateShield (defendTime));
 		isShielded = true;
@@ -210,14 +213,14 @@ public class Amelia : MonoBehaviour {
 	}
 
 	public void GetHit(GameObject enemy) {
-		if (!isShielded || (isShielded && ((facingRight && enemy.transform.position.x < transform.position.x)// caso em que tem shield
-			|| (!facingRight && enemy.transform.position.x > transform.position.x)))) {		  //  mas não na direção do atk
+		//if (!isShielded || (isShielded && ((facingRight && enemy.transform.position.x < transform.position.x)// caso em que tem shield
+		//	|| (!facingRight && enemy.transform.position.x > transform.position.x)))) {		  //  mas não na direção do atk
+		if (!isShielded) {
 			life--;
 			StartCoroutine (PiscaVermelho ());
 			attacked = true;
 			StartCoroutine (AttackedFalse (0.5f));
 		}
-
 	}
 
 	public void IgnoraColisaoPenhasco() {

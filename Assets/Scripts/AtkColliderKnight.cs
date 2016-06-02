@@ -25,7 +25,7 @@ public class AtkColliderKnight : MonoBehaviour {
 			if (transform.parent.gameObject.GetComponent<Knight2> ().canHitTower)
 				gate.GetHit (1);
 		} else if (other.gameObject.tag == "ShieldBlock") {
-			// Deflect();
+			knight.Stun();
 		}
 	}
 }

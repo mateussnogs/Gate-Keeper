@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
-	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway};
+	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway, Stunned};
 	public enum TargetLocation {Right, Left, Found}; // em geral vai ser amelia!! Mas pode ser o portão também...
 	[HideInInspector]
 	public enum ID {Wyvern, Knight, Unknown};
@@ -27,7 +27,8 @@ public class Enemy : MonoBehaviour {
 	int dmg;
 	Text dmgText;
 	public GameObject target;
-
+	SpriteRenderer spriteRenderer;
+	Color originalColor;
 	// Use this for initialization
 	public virtual void Start () {
 		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Enemy"), LayerMask.NameToLayer ("Button"));
@@ -37,6 +38,9 @@ public class Enemy : MonoBehaviour {
 		target = amelia.gameObject;
 		if (transform.childCount > 0 && transform.GetChild(0) != null)
 			atkCollider = transform.GetChild (0).gameObject;
+
+		spriteRenderer = GetComponent<SpriteRenderer> ();
+		originalColor = spriteRenderer.color;
 	}
 
 	// Update is called once per frame
@@ -59,6 +63,9 @@ public class Enemy : MonoBehaviour {
 			break;
 		case State.RunningAway:
 			RunAway ();
+			break;
+		case State.Stunned:
+			Stunned ();
 			break;
 		}
 	}
@@ -104,6 +111,7 @@ public class Enemy : MonoBehaviour {
 	}
 	public virtual void GetHit() {
 		if (!stateBegun) {
+			StartCoroutine (PiscaBranco (0.2f));
 			stateBegun = true;
 			attackedTimeAcc = Time.time + attackedTime;
 		}
@@ -118,6 +126,12 @@ public class Enemy : MonoBehaviour {
 
 	} // ou Attacked()
 
+
+	IEnumerator PiscaBranco(float time) {
+		spriteRenderer.color = Color.black;
+		yield return new WaitForSeconds (time);
+		spriteRenderer.color = originalColor;
+	}
 	public virtual void Attacked(int dmg = 1, int weaponBreakChance = 0) { // não tem a ver com o estado Attacked diretamente
 		CleanAnimationStateMachine (); // State setado quando atacado e com prioridade maior. Por isso limpa a machine state.
 		this.dmg = dmg;
@@ -170,6 +184,7 @@ public class Enemy : MonoBehaviour {
 		anim.SetBool ("Walk", false);
 		anim.SetBool ("Attacked", false);
 		anim.SetBool ("Defend", false);
+		anim.SetBool ("Stunned", false);
 		if (id != ID.Knight)
 			anim.SetBool ("RunAway", false);
 	}
@@ -218,6 +233,8 @@ public class Enemy : MonoBehaviour {
 		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * walkSpeed);
 	}
 
+	public virtual void Stunned() {
+	}
 	public virtual void SwitchState(State newState, string animVar) {
 		if (atkCollider != null)
 			atkCollider.SetActive (false); // gambiarra pra sempre garantir que o atkcollider seja desligado
