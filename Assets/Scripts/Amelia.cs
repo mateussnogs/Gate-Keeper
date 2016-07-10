@@ -46,9 +46,11 @@ public class Amelia : MonoBehaviour {
 	public GameObject spearGO;
 	public GameObject shield;
 	GameObject protection;
+	AudioSource getHitSound;
 
 	// Use this for initialization
 	void Start () {
+		getHitSound = GetComponent<AudioSource> ();
 		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Button"));
 		anim = GetComponent<Animator> ();
 		sprite = GetComponent<SpriteRenderer> ();
@@ -127,6 +129,7 @@ public class Amelia : MonoBehaviour {
 
 	public void Climb(bool up) {
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), ground2.GetComponent<Collider2D>());
+		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Enemy"));
 		anim.SetBool ("Climbing", true);
 		GetComponent<Rigidbody2D> ().gravityScale = 0;
 		Vector3 destiny;
@@ -145,6 +148,7 @@ public class Amelia : MonoBehaviour {
 		else
 			climbingDown = false;
 		Physics2D.IgnoreCollision (GetComponent<Collider2D> (), ground2.GetComponent<Collider2D>(), false);
+		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Enemy"), false);
 		anim.SetBool ("Climbing", false);
 		climbing = false;
 		GetComponent<Rigidbody2D> ().gravityScale = 2;
@@ -166,6 +170,7 @@ public class Amelia : MonoBehaviour {
 	}
 
 	public void Defend() {
+		anim.Play ("Defense");
 		protection.GetComponent<Animator> ().Play ("AmeliaProtection");
 		shield.SetActive (true);
 		StartCoroutine(DeactivateShield (defendTime));
@@ -216,6 +221,7 @@ public class Amelia : MonoBehaviour {
 		//if (!isShielded || (isShielded && ((facingRight && enemy.transform.position.x < transform.position.x)// caso em que tem shield
 		//	|| (!facingRight && enemy.transform.position.x > transform.position.x)))) {		  //  mas não na direção do atk
 		if (!isShielded) {
+			getHitSound.Play ();
 			life--;
 			StartCoroutine (PiscaVermelho ());
 			attacked = true;

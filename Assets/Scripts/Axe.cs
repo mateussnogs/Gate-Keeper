@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Axe : Weapon {
-	public static int weaponBreakChance = 5;
+	public static int weaponBreakChance = 100; // sempre acerta
 	public Axe(Amelia amelia, int dmg, float atkTime) : base(amelia, dmg, atkTime) {
 		
 	}

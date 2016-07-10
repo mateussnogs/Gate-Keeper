@@ -15,6 +15,7 @@ public class RestartButton : MonoBehaviour {
 	}
 
 	public void RestartListener() {
+		SceneManager.UnloadScene ("Scene01");
 		SceneManager.LoadScene ("Scene01");
 	}
 }

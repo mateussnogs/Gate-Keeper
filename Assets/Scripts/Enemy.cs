@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour {
 	public enum State {Walking, Attacking, Attacked, Waiting, Defending, RunningAway, Stunned};
 	public enum TargetLocation {Right, Left, Found}; // em geral vai ser amelia!! Mas pode ser o portão também...
 	[HideInInspector]
-	public enum ID {Wyvern, Knight, Unknown};
+	public enum ID {Wyvern, Knight, KnightSemEscudo, Unknown};
 	public int life;
 	public State state = State.Waiting;
 	public ID id = ID.Unknown;
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour {
 	[HideInInspector]
 	public GameObject atkCollider;
 	private IEnumerator coroutineAtk;
-	int dmg;
+	public int dmg;
 	Text dmgText;
 	public GameObject target;
 	SpriteRenderer spriteRenderer;
@@ -35,7 +35,11 @@ public class Enemy : MonoBehaviour {
 		dmgText = GameObject.FindGameObjectWithTag ("DmgText").GetComponent<Text>();
 		anim = GetComponent<Animator> ();
 		amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
-		target = amelia.gameObject;
+		if(amelia == null)
+			amelia = GameObject.FindGameObjectWithTag ("Amelia").GetComponent<Amelia>();
+		else 
+			target = amelia.gameObject;
+		
 		if (transform.childCount > 0 && transform.GetChild(0) != null)
 			atkCollider = transform.GetChild (0).gameObject;
 
@@ -110,8 +114,8 @@ public class Enemy : MonoBehaviour {
 			atkCollider.SetActive (true);
 	}
 	public virtual void GetHit() {
-		if (!stateBegun) {
-			StartCoroutine (PiscaBranco (0.2f));
+		/*if (!stateBegun) {
+			StartCoroutine (PiscaPreto (0.2f));
 			stateBegun = true;
 			attackedTimeAcc = Time.time + attackedTime;
 		}
@@ -122,12 +126,12 @@ public class Enemy : MonoBehaviour {
 				SwitchState (State.RunningAway, "RunAway");
 			else
 				SwitchState (State.Waiting, "Stand");
-		}
+		}*/
 
 	} // ou Attacked()
 
 
-	IEnumerator PiscaBranco(float time) {
+	public IEnumerator PiscaPreto(float time) {
 		spriteRenderer.color = Color.black;
 		yield return new WaitForSeconds (time);
 		spriteRenderer.color = originalColor;
@@ -137,7 +141,7 @@ public class Enemy : MonoBehaviour {
 		this.dmg = dmg;
 		if (Defended (weaponBreakChance) && id == ID.Knight)
 			SwitchState (State.Defending, "Defend");
-		else if (id == ID.Knight) {
+		else if (id == ID.Knight || id == ID.KnightSemEscudo) {
 			if (coroutineAtk != null)
 				StopCoroutine (coroutineAtk);
 			SwitchState (State.Attacked, "Attacked"); // vai chamar GetHit por estar no estado Attacked
@@ -146,27 +150,13 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	Vector3 destiny;
-	public virtual void Defend() {		
-		if (!stateBegun) {
-			stateBegun = true;
-			defendTimeAcc = Time.time + defendTime;
-
-			if (facingRight && !IsCloseToLeftBound ())
-				destiny = transform.position + new Vector3 (-1, 0, 0);
-			else if (!facingRight && !IsCloseToRightBound ())
-				destiny = transform.position + new Vector3 (1, 0, 0);
-			else
-				destiny = transform.position;
-		}
-		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime*walkSpeed*3);
-		if (Time.time > defendTimeAcc) {
-			anim.SetBool ("Defend", false);
-			SwitchState (State.Waiting, "Stand");
-		}
-	}
+	public Vector3 destiny;
+	public virtual void Defend() {}
 
 	public virtual bool Defended(int weaponBreakChance) {
+		return false;
+	}
+	/*public virtual bool Defended(int weaponBreakChance) {
 		int roll = Random.Range (1, 11);
 		if (state == State.Attacking || (amelia.facingRight && facingRight) //Se estiver atacando, ou olhando para lado contrário
 			|| (!amelia.facingRight && !facingRight)) { 						// Não defende certamente!
@@ -176,7 +166,7 @@ public class Enemy : MonoBehaviour {
 			return true;
 		} else
 			return false;
-	}
+	}*/
 
 	public virtual void CleanAnimationStateMachine() {
 		anim.SetBool ("Attack", false);
@@ -185,7 +175,7 @@ public class Enemy : MonoBehaviour {
 		anim.SetBool ("Attacked", false);
 		anim.SetBool ("Defend", false);
 		anim.SetBool ("Stunned", false);
-		if (id != ID.Knight)
+		if (id != ID.Knight && id != ID.KnightSemEscudo)
 			anim.SetBool ("RunAway", false);
 	}
 
@@ -254,16 +244,20 @@ public class Enemy : MonoBehaviour {
 		Vector3 origin = transform.position;
 		Vector3 destiny = origin;
 		TargetLocation ameliaLocation = FindTarget (target);
-		if (facingRight && ameliaLocation == TargetLocation.Left) {
-			ChangeDirection ();
-		} else if (!facingRight && ameliaLocation == TargetLocation.Right)
-			ChangeDirection ();
-		else if (ameliaLocation == TargetLocation.Found)
-			return true;
-		if (facingRight)
-			destiny = origin + new Vector3 (1, 0, 0);
-		else
-			destiny = origin + new Vector3 (-1, 0, 0);
+		if (ViewPortPosiition ().x == 0)
+			destiny = transform.position;
+		else {
+			if (facingRight && ameliaLocation == TargetLocation.Left) {
+				ChangeDirection ();
+			} else if (!facingRight && ameliaLocation == TargetLocation.Right)
+				ChangeDirection ();
+			else if (ameliaLocation == TargetLocation.Found)
+				return true;
+			if (facingRight)
+				destiny = origin + new Vector3 (1, 0, 0);
+			else
+				destiny = origin + new Vector3 (-1, 0, 0);
+		}
 
 		transform.position = Vector3.MoveTowards (transform.position, destiny, Time.deltaTime * walkSpeed);
 		return false;
@@ -300,6 +294,11 @@ public class Enemy : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public virtual void Die() {
+		Score.IncreaseScore (10);
+		Destroy (gameObject);
 	}
 
 

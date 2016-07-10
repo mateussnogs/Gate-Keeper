@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Gate : MonoBehaviour {
 	public int hp = 10;
@@ -14,7 +15,10 @@ public class Gate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (hp <= 0) {
+			SceneManager.UnloadScene ("Scene01");
+			SceneManager.LoadScene ("GameOver");
+		}
 	}
 
 	public void GetHit(int dmg) {

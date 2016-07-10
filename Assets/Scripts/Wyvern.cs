@@ -45,8 +45,23 @@ public class Wyvern : Enemy {
 		}
 	}
 
-	public void Die() {
-		Destroy (gameObject);
-	}
+	public override void GetHit() {
+		if (!stateBegun) {
+			StartCoroutine (PiscaPreto (0.2f));
+			stateBegun = true;
+			attackedTimeAcc = Time.time + attackedTime;
+		}
+		if (Time.time > attackedTimeAcc) {
+			life -= dmg;
+			anim.SetBool ("Attacked", false);
+			SwitchState (State.RunningAway, "RunAway");
+		}
 
+	} // ou Attacked()
+		
+	public override void Die ()
+	{
+		base.Die ();
+		Score.IncreaseScore (5);
+	}
 }

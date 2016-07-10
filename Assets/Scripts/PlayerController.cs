@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
 		} else if (amelia.movingLeft)
 			amelia.Move (false);
 		else if (amelia.climbing) {
+			
 			if (amelia.climbingUp)
 				amelia.Climb (true);
 			else

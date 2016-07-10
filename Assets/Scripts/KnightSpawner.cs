@@ -17,4 +17,5 @@ public class KnightSpawner : MonoBehaviour {
 			Instantiate (knight, transform.position, Quaternion.identity);
 		}
 	}
+
 }

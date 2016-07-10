@@ -13,9 +13,11 @@ public class TouchController : MonoBehaviour {
 	public Text text2;
 
 	AtkButton axeButton, swordButton, spearButton, defendButton;
-	Button leftButton, rightButton, jumpButton;
+	Button leftButton, rightButton, jumpButton, escadaButton;
 
 	float spearTimeAcc;
+
+	public GameObject analogico;
 
 	// Use this for initialization
 	void Start () {
@@ -24,8 +26,9 @@ public class TouchController : MonoBehaviour {
 		spearButton = GameObject.FindGameObjectWithTag ("SpearButton").GetComponent<AtkButton>();
 		leftButton = GameObject.FindGameObjectWithTag ("LeftButton").GetComponent<Button> ();
 		rightButton = GameObject.FindGameObjectWithTag ("RightButton").GetComponent<Button> ();
-		jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
+		//jumpButton = GameObject.FindGameObjectWithTag ("JumpButton").GetComponent<Button> ();
 		defendButton = GameObject.FindGameObjectWithTag ("DefendButton").GetComponent<AtkButton> ();
+		escadaButton = GameObject.FindGameObjectWithTag ("EscadaButton").GetComponent<Button> ();
 	}
 	
 	// Update is called once per frame
@@ -76,11 +79,15 @@ public class TouchController : MonoBehaviour {
 						}
 					}
 					if (buttonTouched == "ClimbButton") {
-						amelia.climbing = true;
-						if (amelia.canClimbUp)
+						escadaButton.SetTransparent (false);
+
+						if (amelia.canClimbUp) {
+							amelia.climbing = true;
 							amelia.climbingUp = true;
-						else if (amelia.canClimbDown)
+						} else if (amelia.canClimbDown) {
+							amelia.climbing = true;
 							amelia.climbingDown = true;	
+						}
 					}
 				}
 			}
