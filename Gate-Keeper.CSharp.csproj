@@ -58,47 +58,13 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Amelia.cs" />
-    <Compile Include="Assets\Scripts\AtkButton.cs" />
-    <Compile Include="Assets\Scripts\AtkCollider.cs" />
-    <Compile Include="Assets\Scripts\AtkColliderAmelia.cs" />
-    <Compile Include="Assets\Scripts\AtkColliderKnight.cs" />
-    <Compile Include="Assets\Scripts\AttackMode.cs" />
-    <Compile Include="Assets\Scripts\Axe.cs" />
-    <Compile Include="Assets\Scripts\BackgroundBounds.cs" />
-    <Compile Include="Assets\Scripts\Button.cs" />
-    <Compile Include="Assets\Scripts\ColliderEscalar.cs" />
-    <Compile Include="Assets\Scripts\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Fireball.cs" />
-    <Compile Include="Assets\Scripts\Gate.cs" />
-    <Compile Include="Assets\Scripts\KeyboardController.cs" />
-    <Compile Include="Assets\Scripts\Knight2.cs" />
-    <Compile Include="Assets\Scripts\KnightSpawner.cs" />
-    <Compile Include="Assets\Scripts\LifeBar.cs" />
-    <Compile Include="Assets\Scripts\PenhascoSmooth.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\RestartButton.cs" />
-    <Compile Include="Assets\Scripts\Score.cs" />
-    <Compile Include="Assets\Scripts\Shield.cs" />
-    <Compile Include="Assets\Scripts\Spear.cs" />
-    <Compile Include="Assets\Scripts\StartButton.cs" />
-    <Compile Include="Assets\Scripts\Sword.cs" />
-    <Compile Include="Assets\Scripts\ThrowingSpear.cs" />
-    <Compile Include="Assets\Scripts\TouchController.cs" />
-    <Compile Include="Assets\Scripts\Weapon.cs" />
-    <Compile Include="Assets\Scripts\Wyvern.cs" />
-    <Compile Include="Assets\Scripts\test.cs" />
+    <Compile Include="Assets\PlayerInput.cs" />
+    <Compile Include="Assets\PlayerMovement.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
