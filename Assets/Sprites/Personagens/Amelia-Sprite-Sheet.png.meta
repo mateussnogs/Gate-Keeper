@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 7727bc97c1a45e44aae4a6e3d1f53555
-timeCreated: 1468537987
+timeCreated: 1469565659
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -142,34 +142,34 @@ TextureImporter:
     - name: Amelia-Sprite-Sheet_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 2361
-        width: 26
-        height: 119
+        x: 82
+        y: 2416
+        width: 13
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: Amelia-Sprite-Sheet_1
       rect:
         serializedVersion: 2
         x: 108
-        y: 2396
-        width: 18
-        height: 77
+        y: 2416
+        width: 16
+        height: 57
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: Amelia-Sprite-Sheet_2
       rect:
         serializedVersion: 2
         x: 135
-        y: 2396
+        y: 2416
         width: 23
-        height: 68
+        height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: Amelia-Sprite-Sheet_3
@@ -215,7 +215,7 @@ TextureImporter:
         width: 62
         height: 86
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: -25.800003, y: 36.174927}
@@ -275,6 +275,39 @@ TextureImporter:
         - {x: 33, y: -36.025024}
         - {x: 33, y: 3.9749756}
         - {x: 25, y: 31.974976}
+    - name: Amelia-Sprite-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 2364
+        width: 8
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Amelia-Sprite-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 2402
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Amelia-Sprite-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 2399
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: Amelia-Sprite-Sheet_11
       rect:
         serializedVersion: 2
@@ -1331,42 +1364,68 @@ TextureImporter:
     - name: Amelia-Sprite-Sheet_60
       rect:
         serializedVersion: 2
-        x: 147
-        y: 687
-        width: 36
-        height: 66
+        x: 151
+        y: 691
+        width: 29
+        height: 56
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Amelia-Sprite-Sheet_61
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 733
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: Amelia-Sprite-Sheet_62
       rect:
         serializedVersion: 2
         x: 363
-        y: 664
-        width: 110
-        height: 107
+        y: 671
+        width: 82
+        height: 100
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 42.475006, y: 45.799988}
-        - {x: 15.475006, y: 45.799988}
-        - {x: -15.524994, y: -19.200012}
-        - {x: -12.524994, y: -25.200012}
-        - {x: -5.524994, y: -30.200012}
-        - {x: -14.524994, y: -27.200012}
-        - {x: -33.524994, y: -7.200012}
-        - {x: -6.524994, y: 35.799988}
-        - {x: -2.524994, y: 43.799988}
-        - {x: -3.524994, y: 45.799988}
-        - {x: -30.524994, y: 45.799988}
-        - {x: -45.524994, y: 33.799988}
-        - {x: -45.524994, y: -32.200012}
-        - {x: -23.524994, y: -38.200012}
-        - {x: 39.475006, y: -38.200012}
-        - {x: 43.475006, y: -23.200012}
-        - {x: 43.475006, y: 44.799988}
+      - - {x: -4.024994, y: -22.424988}
+        - {x: -1.0249939, y: -28.424988}
+        - {x: 5.975006, y: -33.424988}
+        - {x: -3.024994, y: -30.424988}
+        - {x: -22.024994, y: -10.424988}
+        - {x: 4.975006, y: 32.575012}
+        - {x: 8.975006, y: 40.575012}
+        - {x: 7.975006, y: 42.575012}
+        - {x: -19.024994, y: 42.575012}
+        - {x: -34.024994, y: 30.575012}
+        - {x: -34.024994, y: -25.424988}
+        - {x: -16.024994, y: -41.424988}
+        - {x: 29.975006, y: -41.424988}
+        - {x: 34.975006, y: -37.424988}
+        - {x: 34.975006, y: -13.424988}
+        - {x: 1.9750061, y: -20.424988}
+      - - {x: 31.975006, y: 32.575012}
+        - {x: 33.975006, y: 30.575012}
+        - {x: 34.975006, y: 30.575012}
+        - {x: 34.975006, y: 37.575012}
+        - {x: 31.975006, y: 36.575012}
+    - name: Amelia-Sprite-Sheet_63
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 696
+        width: 24
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: Amelia-Sprite-Sheet_64
       rect:
         serializedVersion: 2
@@ -1385,6 +1444,17 @@ TextureImporter:
         y: 694
         width: 15
         height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Amelia-Sprite-Sheet_66
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 681
+        width: 49
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1484,6 +1554,17 @@ TextureImporter:
         - {x: 18.59999, y: -35.225006}
         - {x: 18.59999, y: 28.774994}
         - {x: 16.59999, y: 45.774994}
+    - name: Amelia-Sprite-Sheet_72
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 600
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: Amelia-Sprite-Sheet_73
       rect:
         serializedVersion: 2
@@ -1565,30 +1646,39 @@ TextureImporter:
         serializedVersion: 2
         x: 319
         y: 435
-        width: 109
-        height: 126
+        width: 91
+        height: 112
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -31.325012, y: 43.375}
-        - {x: -45.325012, y: 32.375}
-        - {x: -45.325012, y: -25.625}
-        - {x: -42.325012, y: -34.625}
-        - {x: -7.325012, y: -51.625}
-        - {x: 28.674988, y: -51.625}
-        - {x: 31.674988, y: -46.625}
-        - {x: 31.674988, y: 14.375}
-        - {x: 14.674988, y: 43.375}
-      - - {x: 6.674988, y: 52.375}
-        - {x: 2.6749878, y: 52.375}
-        - {x: 0.6749878, y: 50.375}
-        - {x: 0.6749878, y: 37.375}
-        - {x: 29.674988, y: 21.375}
-        - {x: 40.674988, y: 21.375}
-        - {x: 42.674988, y: 23.375}
-        - {x: 42.674988, y: 36.375}
-        - {x: 38.674988, y: 46.375}
+      - - {x: -24.825012, y: 47.875}
+        - {x: -37.825012, y: 37.875}
+        - {x: -37.825012, y: -20.125}
+        - {x: -34.825012, y: -29.125}
+        - {x: 0.1749878, y: -46.125}
+        - {x: 36.174988, y: -46.125}
+        - {x: 38.174988, y: -43.125}
+        - {x: 38.174988, y: 21.875}
+        - {x: 23.174988, y: 47.875}
+      - - {x: 8.174988, y: 47.875}
+        - {x: 8.174988, y: 44.875}
+        - {x: 15.174988, y: 39.875}
+        - {x: 25.174988, y: 34.875}
+        - {x: 36.174988, y: 29.875}
+        - {x: 38.174988, y: 29.875}
+        - {x: 38.174988, y: 47.875}
+    - name: Amelia-Sprite-Sheet_77
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 524
+        width: 48
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: Amelia-Sprite-Sheet_78
       rect:
         serializedVersion: 2
@@ -1597,7 +1687,7 @@ TextureImporter:
         width: 99
         height: 119
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: 10.225006, y: -16.450012}
