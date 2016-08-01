@@ -8,41 +8,42 @@ public class AmeliaBehaviour: MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
     private IEnumerator coroutineInstance;
+    private Transform ameliaTransform;
+    private float lookAt;
 
-    [HideInInspector]
-    public bool isAttacking;
 
+
+    public Battle weapon;
+    
     void Start()
     {
+        ameliaTransform = transform.parent.transform;
         coroutineInstance = null;
         rb = GetComponentInParent<Rigidbody2D>();
         anim = GetComponentInParent<Animator>();
-        isAttacking = false;
     }
-
     public void Move(float dirX)
     {
         dir = new Vector2(dirX, 0);
         rb.velocity = dir.normalized * speed;
+
+        if (dirX != 0)
+        {
+            lookAt = Mathf.Rad2Deg * Mathf.Acos((-1) * Mathf.RoundToInt(dirX));
+            anim.SetBool("Running", true);
+        }
+        else
+            anim.SetBool("Running", false);
+        ameliaTransform.eulerAngles = new Vector3(0, lookAt, 0);
     }
     public void AttackTrigger()
     {
         if (coroutineInstance == null)
         {
-            coroutineInstance = Attack();
+            coroutineInstance = weapon.Attack(anim);
             StartCoroutine(coroutineInstance);
+            coroutineInstance = null;
         }
-    }
-    public IEnumerator Attack()
-    {
-        anim.SetTrigger("Attack");
-        isAttacking = true;
-        //pega o tempo do ataque pra habilitar novamente
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
-
-        coroutineInstance = null;
-        isAttacking = false;
-
     }
     
 

@@ -7,7 +7,7 @@ public class StateMachine : MonoBehaviour {
     private float gateDistance, playerDistance;
     public EnemyStates states;
 
-    public EnemyCollisionTreatment enemyStatus;
+    public EnemyStatus enemyStatus;
     private GameObject enemy;
 
     //variaveis de controle da corotina de ataque

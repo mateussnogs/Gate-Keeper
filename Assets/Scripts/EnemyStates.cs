@@ -50,5 +50,9 @@ public class EnemyStates : MonoBehaviour {
         }
        
     }
+    public void GetHit()
+    {
+        anim.SetTrigger("Damaged");
+    }
 
 }
