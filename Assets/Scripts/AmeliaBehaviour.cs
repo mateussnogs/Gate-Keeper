@@ -11,8 +11,6 @@ public class AmeliaBehaviour: MonoBehaviour {
     private Transform ameliaTransform;
     private float lookAt;
 
-
-
     public Battle weapon;
     
     void Start()
@@ -33,7 +31,9 @@ public class AmeliaBehaviour: MonoBehaviour {
             anim.SetBool("Running", true);
         }
         else
+        {
             anim.SetBool("Running", false);
+        }
         ameliaTransform.eulerAngles = new Vector3(0, lookAt, 0);
     }
     public void AttackTrigger()

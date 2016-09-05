@@ -20,7 +20,6 @@ public class EnemyStates : MonoBehaviour {
         dir = new Vector2(Mathf.Cos(enemy.transform.rotation.x), 0);
 
     }
-
     void Update()
     {
        
@@ -47,6 +46,13 @@ public class EnemyStates : MonoBehaviour {
             yield return new WaitForSeconds(1.0f);
             rb.velocity = Vector2.zero;
             anim.SetTrigger("Attack");
+            //Bem ruim essa parte aqui 
+            print("Caralho do enemyu" + gameObject.GetComponent<EnemyStatus>().targetObject.name);
+            if (enemy.GetComponentInChildren<EnemyStatus>().targetObject.name == "Gate")
+            {
+                enemy.GetComponentInChildren<EnemyStatus>().targetObject.GetComponent<Gate>().GetHit();
+            }
+          
         }
        
     }

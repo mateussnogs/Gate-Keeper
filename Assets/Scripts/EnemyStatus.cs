@@ -6,12 +6,15 @@ public class EnemyStatus : MonoBehaviour {
     [HideInInspector]
     public bool isAttacking, isPursuing;
     public float speed;
+   
+    public GameObject targetObject;
 
 
     void Start()
     {
         isAttacking = false;
         isPursuing = true;
+
     }
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -19,11 +22,13 @@ public class EnemyStatus : MonoBehaviour {
         {
             isAttacking = true;
             isPursuing = false;
+       //     targetObject = col.gameObject;
         }
         else if(col.gameObject.CompareTag("Player"))
         {
             isAttacking = true;
             isPursuing = false;
+         //   targetObject = col.gameObject;
             
         }
     }
@@ -33,11 +38,15 @@ public class EnemyStatus : MonoBehaviour {
         {
             isAttacking = true;
             isPursuing = false;
+
+//            targetObject = col.gameObject;
         }
         else if (col.gameObject.CompareTag("Player"))
         {
             isAttacking = true;
             isPursuing = false;
+
+           // targetObject = col.gameObject;
         }
     }
     void OnTriggerExit2D(Collider2D col)
@@ -46,6 +55,8 @@ public class EnemyStatus : MonoBehaviour {
         {
             isAttacking = false;
             isPursuing = true;
+
+           // targetObject = null;
         }
     }
     
